@@ -22,9 +22,9 @@ export default (connection, DataTypes) => {
         allowNull: false,
       },
       isAdmin: {
-        type:DataTypes.BOOLEAN , 
-        defaultValue : false ,
-      }
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       timestamp: true,

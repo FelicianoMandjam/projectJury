@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 // Routes
+import userRoutes from "./Routes/user.routes.js";
 
 import "./Models/index.js";
 
@@ -24,5 +25,6 @@ app.use((req, res, next) => {
 });
 
 // Prefixes
+app.use("/user", userRoutes);
 
 export default app;

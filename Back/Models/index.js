@@ -50,7 +50,7 @@ const { User , Product , Contact , Category , Post , Comment} = connection.model
 
 
 await connection.sync({ alter: false, force: false });
-console.log("Synchro Ok ");
+console.log("Synchro Ok INDEx.js");
 
 // export default connection.models
 export { User, Product , Contact , Category , Post , Comment};
