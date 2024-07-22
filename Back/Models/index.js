@@ -39,7 +39,10 @@ const { User , Product , Contact , Category , Post , Comment} = connection.model
  if !guest : hasOne: User
 
             Comment
-    hasOne : User
+    hasOne : User , Post
+
+           Category
+  hasMany : Post 
  
  */  
  
