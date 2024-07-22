@@ -1,0 +1,52 @@
+services:
+  back:
+    environment:
+      - PORT=${PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_DIALECT=${DATABASE_DIALECT}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_HOST=${DATABASE_HOST}
+    build:
+      context: ./Back
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - projetJurySieli-network
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    networks:
+      - projetJurySieli-network
+
+  phpmyadmin:
+    depends_on:
+      - mysqldb
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8090:80"
+    environment:
+      PMA_HOST: mysqldb
+      MYSQL_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+    networks:
+      - projetJurySieli-network
+
+  # front:
+  #   build:
+  #     context: ./Front
+  #   ports:
+  #     - 8181:5173
+  #   networks:
+  #     - app-network
+
+networks:
+  projetJurySieli-network:
