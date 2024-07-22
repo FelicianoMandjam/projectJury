@@ -16,17 +16,13 @@ try {
 }
 
 userModel(connection, Sequelize);
-productModel(connection , Sequelize)
-categoryModel(connection , Sequelize)
-contactModel(connection, Sequelize)
-postModel(connection, Sequelize)
-commentsModel(connection , Sequelize)
+productModel(connection, Sequelize);
+categoryModel(connection, Sequelize);
+contactModel(connection, Sequelize);
+postModel(connection, Sequelize);
+commentsModel(connection, Sequelize);
 
-
-
-
-const { User , Product , Contact , Category , Post , Comment} = connection.models;
-
+const { User, Product, Contact, Category, Post, Comment } = connection.models;
 
 // Les relations
 
@@ -44,13 +40,10 @@ const { User , Product , Contact , Category , Post , Comment} = connection.model
            Category
   hasMany : Post 
  
- */  
- 
+ */
 
-
-
-await connection.sync({ alter: false, force: false });
+await connection.sync({ alter: true, force: false });
 console.log("Synchro Ok INDEx.js");
 
 // export default connection.models
-export { User, Product , Contact , Category , Post , Comment};
+export { User, Product, Contact, Category, Post, Comment };
