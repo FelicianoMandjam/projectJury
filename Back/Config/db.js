@@ -8,10 +8,11 @@ const connection = new Sequelize(
   env.DATABASE_PASSWORD, // Password DB
   {
     host: env.DATABASE_HOST, // URL de mySQL
-    dialect: env.DATABASE_DIALECT,
-    dialectOptions: {
-      socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
-    },
+    dialect: "mysql",
+    logging: false,
+    // dialectOptions: {
+    //   socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
+    // },
   }
 );
 

@@ -5,7 +5,7 @@ dotenv.config();
 export const env = {
   port: process.env.PORT,
   TOKEN: process.env.TOKEN,
-  DATABASE_URI: process.env.DATABASE_URI,
+  DATABASE_HOST: process.env.DATABASE_HOST,
   DATABASE_NAME: process.env.DATABASE_NAME,
   DATABASE_USER: process.env.DATABASE_USER,
   DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
