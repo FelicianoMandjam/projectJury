@@ -16,6 +16,38 @@ export const getAll = async (req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  try {
+    // Récupère l'ID de l'utilisateur depuis les paramètres de la requête
+    const id = req.params.id;
+    // Utilise la méthode findByPk de Sequelize pour obtenir l'utilisateur avec l'ID spécifié
+    const user = await User.findByPk(id);
+    // Répond avec le statut 200 (OK) et l'utilisateur
+    res.status(200).json(user);
+  } catch (error) {
+    // Log l'erreur si quelque chose se passe mal
+    console.log(error);
+  }
+};
+
+const getByUsername = async (req, res) => {
+  try {
+    console.log("on rentre dans le try du getByUsername");
+    // Utilise la méthode findByPk de Sequelize pour obtenir l'utilisateur avec l'ID spécifié
+    const user = await User.findOne({
+      where: { username: req.body.username },
+    });
+    console.log(user);
+
+    if (!user) res.status(404).json("User not found!");
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Impossible to find the User.");
+  }
+};
+
+// POST: register
 const register = async (req, res, next) => {
   //  Début du bloc try pour la gestion des erreurs
   try {
@@ -38,6 +70,7 @@ const register = async (req, res, next) => {
   }
 };
 
+// POST: login
 const login = async (req, res) => {
   try {
     // Recherche l'user dans la base de données par son email
@@ -77,4 +110,50 @@ const login = async (req, res) => {
   }
 };
 
-export default { getAll, register, login };
+// UPDATE by ID
+const updateById = async (req, res) => {
+  try {
+    // Je récupère l'utilisateur avec son id (findByPk)
+    const user = await User.findByPk(req.params.id);
+
+    // Puis je met à jour cet utilisateur avec update
+    await user.update(req.body);
+    // Si l'utilisateur n'est pas trouvé, renvoie le statut 404 (Non trouvé) et un message d'erreur
+    if (!user) return res.status(404).json("User not found !");
+    // Si tout se passe bien, renvoie le statut 200 (OK), un message de confirmation et l'utilisateur mis à jour
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    // Log l'erreur si quelque chose se passe mal
+    console.log(error);
+    res.status(500).json("Problem with the update method. ");
+  }
+};
+
+// DELETE by ID
+const deleteById = async (req, res) => {
+  try {
+    // Utilise la méthode destroy de Serquelize pour supprimer l'utilisateur avec l'ID spécifié
+    const userDeleted = await User.destroy({ where: { id: req.params.id } });
+    // Si l'utilisateur n'est pas trouvé, renvoie le statut 404 (Non trouvé) et un message d'erreur
+    console.log(userDeleted);
+    if (!userDeleted) return res.status(404).json("User not found !");
+    // Si tout se passe bien, renvoie le statut 200 (OK) et un message de confirmation
+    res.status(200).json("User deleted");
+  } catch (error) {
+    // Log l'erreur si quelque chose se passe mal
+    console.log(error);
+    res.status(500).json("The delete as not work.");
+  }
+};
+
+export default {
+  getAll,
+  register,
+  login,
+  deleteById,
+  updateById,
+  getById,
+  getByUsername,
+};
