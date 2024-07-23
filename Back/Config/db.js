@@ -9,10 +9,12 @@ const connection = new Sequelize(
   {
     host: env.DATABASE_HOST, // URL de mySQL
     dialect: "mysql",
-    logging: false,
-    // dialectOptions: {
-    //   socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
-    // },
+    // logging: false,
+
+    // Deselectionner quand utilisation de Docker
+    dialectOptions: {
+      socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
+    },
   }
 );
 

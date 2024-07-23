@@ -42,7 +42,7 @@ const { User, Product, Contact, Category, Post, Comment } = connection.models;
  
  */
 
-await connection.sync({ alter: true, force: false });
+await connection.sync({ alter: false, force: true });
 console.log("Synchro Ok INDEx.js");
 
 // export default connection.models

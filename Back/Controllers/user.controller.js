@@ -27,12 +27,12 @@ const getById = async (req, res) => {
   } catch (error) {
     // Log l'erreur si quelque chose se passe mal
     console.log(error);
+    res.status(500).json("Not User Found.");
   }
 };
 
 const getByUsername = async (req, res) => {
   try {
-    console.log("on rentre dans le try du getByUsername");
     // Utilise la méthode findByPk de Sequelize pour obtenir l'utilisateur avec l'ID spécifié
     const user = await User.findOne({
       where: { username: req.body.username },
@@ -121,9 +121,7 @@ const updateById = async (req, res) => {
     // Si l'utilisateur n'est pas trouvé, renvoie le statut 404 (Non trouvé) et un message d'erreur
     if (!user) return res.status(404).json("User not found !");
     // Si tout se passe bien, renvoie le statut 200 (OK), un message de confirmation et l'utilisateur mis à jour
-    res.status(200).json({
-      user,
-    });
+    res.status(200).json(user);
   } catch (error) {
     // Log l'erreur si quelque chose se passe mal
     console.log(error);
