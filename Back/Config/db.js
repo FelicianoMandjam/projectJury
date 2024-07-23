@@ -12,9 +12,9 @@ const connection = new Sequelize(
     // logging: false,
 
     // Deselectionner quand utilisation de Docker
-    dialectOptions: {
-      socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
-    },
+    // dialectOptions: {
+    //   socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
+    // },
   }
 );
 
