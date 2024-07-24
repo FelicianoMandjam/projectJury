@@ -16,9 +16,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log("Entrée dans le try de la fonction login");
 
-      const { data, status } = await axios.post(URL.USER_LOGIN, dataForm, {
-        withCredentials: true,
-      });
+      const { data, status } = await axios.post(URL.USER_LOGIN, dataForm);
       console.log(data);
 
       if (status === 200) {
@@ -40,6 +38,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     console.log("Entree dans le Logout");
     localStorage.removeItem("user");
+    document.location.href = "/connexion";
   };
 
   return (
