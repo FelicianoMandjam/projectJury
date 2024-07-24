@@ -5,7 +5,7 @@ const router = express.Router();
 
 // GET'S
 router.get("/getAll", userController.getAll);
-router.get("/getByUssername", userController.getByUsername);
+router.get("/getByUsername", userController.getByUsername);
 router.get("/:id", userController.getById);
 
 // POST's
