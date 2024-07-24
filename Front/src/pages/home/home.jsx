@@ -10,10 +10,6 @@ import Row from "react-bootstrap/Row";
 const Home = () => {
   return (
     <>
-      <div className="title">
-        <h1>Bienvenue Page d'accueil</h1>
-      </div>
-
       <div className="carrossel">
         <Carousel data-bs-theme="dark">
           <Carousel.Item>

@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Importation des pages
 import Home from "./pages/home/home";
 import Contact from "./pages/contact/contact";
+import Login from "./pages/Auth/login";
+import Register from "./pages/Auth/register";
 
 // STYLE / BOOTSTRAP
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,6 +20,8 @@ function App() {
         <Routes>
           <Route index path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/connexion" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Layout>
     </BrowserRouter>
