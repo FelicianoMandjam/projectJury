@@ -3,6 +3,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 // Routes
+import userRoutes from "./Routes/user.routes.js";
+import categoryRoutes from "./Routes/category.routes.js";
+import postRoutes from "./Routes/post.routes.js";
+import commentRoutes from "./Routes/comments.routes.js";
+import productRoutes from "./Routes/product.routes.js";
 
 import "./Models/index.js";
 
@@ -24,5 +29,10 @@ app.use((req, res, next) => {
 });
 
 // Prefixes
+app.use("/user", userRoutes);
+app.use("/category", categoryRoutes);
+app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
+app.use("/product", productRoutes);
 
 export default app;

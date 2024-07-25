@@ -2,6 +2,12 @@ export default (connection, DataTypes) => {
   connection.define(
     "User",
     {
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -22,9 +28,9 @@ export default (connection, DataTypes) => {
         allowNull: false,
       },
       isAdmin: {
-        type:DataTypes.BOOLEAN , 
-        defaultValue : false ,
-      }
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       timestamp: true,

@@ -8,7 +8,10 @@ const connection = new Sequelize(
   env.DATABASE_PASSWORD, // Password DB
   {
     host: env.DATABASE_HOST, // URL de mySQL
-    dialect: env.DATABASE_DIALECT,
+    dialect: "mysql",
+    logging: false,
+
+    // Deselectionner quand utilisation de Docker
     dialectOptions: {
       socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
     },

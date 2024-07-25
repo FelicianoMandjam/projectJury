@@ -1,0 +1,85 @@
+/* src/style/home.css */
+/* Assurez-vous que la hauteur de l'élément body et html est de 100% */
+html, body {
+ 
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #000000;
+  }
+  
+  /* Conteneur principal doit occuper tout l'espace sauf celui réservé pour le footer */
+  .content {
+    height: 100vh;
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+  }
+  
+  /* Styles pour le footer */
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px; /* Ajustez cette valeur à la hauteur souhaitée */
+    background-color: #007bff; /* Couleur de fond du footer */
+    z-index: 1000; /* Assurez-vous que le footer est au-dessus des autres éléments */
+  }
+  .home {
+    padding: 20px;
+  }
+  
+  .home-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .home-header h1 {
+    font-size: 36px;
+    color: #ffffff;
+  }
+  
+  .home-header p {
+    font-size: 18px;
+    color: #ffffff;
+  }
+  
+  .home-content {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .home-tweets {
+    background-color: #1a1a1a; /* Fond des tweets */
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  .tweet {
+    background-color: #333333; /* Fond des tweets individuels */
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+  
+  .tweet p {
+    margin: 0;
+  }
+  
+  .tweet p:first-child {
+    font-size: 16px;
+  }
+  
+  .tweet p:last-child {
+    font-size: 12px;
+    color: #999999;
+  }
+  
