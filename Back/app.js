@@ -8,11 +8,13 @@ import categoryRoutes from "./Routes/category.routes.js";
 import postRoutes from "./Routes/post.routes.js";
 import commentRoutes from "./Routes/comments.routes.js";
 import productRoutes from "./Routes/product.routes.js";
-
-import "./Models/index.js";
+import contactRoutes from "./Routes/contact.routes.js";
 
 // APP
 dotenv.config();
+
+import "./Models/index.js";
+
 const app = express();
 
 // MiddleWare
@@ -34,5 +36,6 @@ app.use("/category", categoryRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/product", productRoutes);
+app.use("/contact", contactRoutes);
 
 export default app;
