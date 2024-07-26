@@ -11,7 +11,7 @@ const transport = nodemailer.createTransport({
   },
 });
 
-export const sendMail = async (req, res) => {
+export const sendMail = async (req, res, next) => {
   console.log(req.body);
 
   try {
@@ -36,7 +36,6 @@ export const sendMail = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json("Probleme envoie de message!");
+    next(error);
   }
-
-  res.json(true);
 };
