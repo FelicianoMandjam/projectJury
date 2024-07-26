@@ -43,3 +43,4 @@ export const URL = {
   // Contact
   CONTACT_POST: "http://localhost:3001/contact/post",
 };
+// Faire attention quand utiliser Docker , rélizer .env a la racine du front et remplacer le localhost par le nom du service

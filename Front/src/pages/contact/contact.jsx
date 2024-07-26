@@ -4,11 +4,12 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 import { URL } from "../../URL/URL.js";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Contact = () => {
   const [user, setUser] = useState({});
-  // const [navigation, setNavigation] = useState();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +25,7 @@ const Contact = () => {
     } catch (e) {
       console.log(e);
     }
+    navigate("/messageEnvoye");
   };
 
   return (
