@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { URL } from "../URL/URL";
 import axios from "axios";
-
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -22,8 +21,7 @@ export const AuthProvider = ({ children }) => {
       if (status === 200) {
         setUser(data);
         console.log(user);
-
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(data));
         const recupUser = localStorage.getItem("user");
         JSON.perse(recupUser);
 
@@ -38,7 +36,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     console.log("Entree dans le Logout");
     localStorage.removeItem("user");
-    document.location.href = "/connexion";
   };
 
   return (
