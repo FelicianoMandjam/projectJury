@@ -39,4 +39,7 @@ export const URL = {
   COMMENT_GET_ALL: "http://localhost:3001/comment/getAll",
   COMMENT_GET_ONE_BYID: "http://localhost:3001/comment/:id",
   COMMENT_DELETE: "http://localhost:3001/comment/:id",
+
+  // Contact
+  CONTACT_POST: "http://localhost:3001/contact/post",
 };

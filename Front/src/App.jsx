@@ -6,6 +6,7 @@ import Home from "./pages/home/home";
 import Contact from "./pages/contact/contact";
 import Login from "./pages/Auth/login";
 import Register from "./pages/Auth/register";
+import AfterContactSend from "./pages/contact/afterContactSend";
 
 // STYLE / BOOTSTRAP
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/connexion" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/messageEnvoye" element={<AfterContactSend />} />
         </Routes>
       </Layout>
     </BrowserRouter>
