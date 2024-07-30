@@ -7,9 +7,15 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
 
+  const connection = () => {
+    const activeUser = localStorage.getItem("user");
+    JSON.parse(activeUser);
+  };
+
   const login = async (dataForm) => {
     console.log("Entree dans login");
     console.log(dataForm);
+    S;
 
     setIsLoading(true);
     try {
@@ -20,11 +26,9 @@ export const AuthProvider = ({ children }) => {
 
       if (status === 200) {
         setUser(data);
-        console.log(user);
         localStorage.setItem("user", JSON.stringify(data));
         const recupUser = localStorage.getItem("user");
         JSON.perse(recupUser);
-
         setIsLoading(false);
       }
     } catch (error) {
