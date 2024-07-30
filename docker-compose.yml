@@ -44,7 +44,7 @@ services:
     build:
       context: ./Front
     ports:
-      - 8181:5173
+      - 5173:5173
     networks:
       - projetJurySieli-network
 

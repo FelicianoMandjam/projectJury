@@ -1,27 +1,25 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import { useState } from "react";
-import { URL } from "../../URL/URL";
-// import "../../style/home.css";
-import axios from "axios";
-import Register from "./register";
 
 const Login = () => {
-  const [user, setUser] = useState({});
-  const { login } = useContext(AuthContext);
+  const [userLogin, setUserLogin] = useState({});
+  const navigate = useNavigate();
+  const { login, user } = useContext(AuthContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((user) => ({ ...user, [name]: value }));
+    setUserLogin((userLogin) => ({ ...userLogin, [name]: value }));
   };
 
   const handleSubmit = (e) => {
-    console.log("Entree dans le handle submit");
     e.preventDefault();
-    login(user);
-    document.location.href = "/";
+    console.log("Entree dans le handle submit");
+    login(userLogin);
+    navigate("/");
   };
 
   return (
@@ -44,10 +42,11 @@ const Login = () => {
       </form>
       <div>
         <small>
-          Vous avez pas encore de compte :{" "}
+          Vous avez pas encore de compte :
           <a href="/register">Page d'inscription</a>
         </small>
       </div>
+      {user && <Navigate to="/" replace={true} />}
     </div>
   );
 };

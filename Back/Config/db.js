@@ -11,7 +11,6 @@ const connection = new Sequelize(
     dialect: "mysql",
     logging: false,
 
-    // Deselectionner quand utilisation de Docker
     dialectOptions: {
       socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
     },
