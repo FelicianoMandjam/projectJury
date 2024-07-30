@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 import { useState } from "react";
-import { URL } from "../../URL/URL";
-// import "../../style/home.css";
-import axios from "axios";
-import Register from "./register";
 
 const Login = () => {
   const [userLogin, setUserLogin] = useState({});
@@ -23,6 +19,7 @@ const Login = () => {
     e.preventDefault();
     console.log("Entree dans le handle submit");
     login(userLogin);
+    navigate("/");
   };
 
   return (

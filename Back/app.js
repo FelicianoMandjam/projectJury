@@ -9,6 +9,7 @@ import postRoutes from "./Routes/post.routes.js";
 import commentRoutes from "./Routes/comments.routes.js";
 import productRoutes from "./Routes/product.routes.js";
 import contactRoutes from "./Routes/contact.routes.js";
+import stripeRoutes from "./Routes/stripe.routes.js";
 
 // APP
 dotenv.config();
@@ -37,5 +38,6 @@ app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/product", productRoutes);
 app.use("/contact", contactRoutes);
+app.use("/stripe", stripeRoutes);
 
 export default app;

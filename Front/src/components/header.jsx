@@ -22,6 +22,8 @@ const Header = () => {
                 <Nav.Link href="/">
                   <FontAwesomeIcon icon={faHouse} />
                 </Nav.Link>
+                <Nav.Link href="/ebook">E-BOOK</Nav.Link>
+                <Nav.Link href="/blog">BLOG</Nav.Link>
                 <Nav.Link href="/contact">
                   <FontAwesomeIcon icon={faEnvelope} />
                 </Nav.Link>

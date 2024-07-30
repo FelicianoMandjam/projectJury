@@ -18,4 +18,11 @@ export const env = {
   MAIL_PASSWORD: process.env.MAIL_PASSWORD,
   MAIL_FROM: process.env.MAIL_FROM,
   MAIL_PORT: process.env.MAIL_PORT,
+
+  // STRIPE
+
+  SECRET_KEY_STRIPE: process.env.SECRET_KEY,
+
+  // WEB
+  WEB_APP_URL: process.env.WEB_APP_URL,
 };
