@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 import { useState } from "react";
 
 const Login = () => {
   const [userLogin, setUserLogin] = useState({});
-  const navigate = useNavigate();
   const { login, user } = useContext(AuthContext);
 
   const handleChange = (e) => {
@@ -19,13 +17,16 @@ const Login = () => {
     e.preventDefault();
     console.log("Entree dans le handle submit");
     login(userLogin);
-    navigate("/");
+  };
+
+  cancelCourse = () => {
+    document.getElementById("create-course-form").reset();
   };
 
   return (
     <div>
       <h1>Page connexion</h1>
-      <form onSubmit={handleSubmit}>
+      <form id="create-course-form" onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="email"

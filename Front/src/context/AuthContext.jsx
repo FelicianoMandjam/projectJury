@@ -1,21 +1,21 @@
 import React, { createContext, useState, useEffect } from "react";
 import { URL } from "../URL/URL";
 import axios from "axios";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
 
-  const connection = () => {
-    const activeUser = localStorage.getItem("user");
-    JSON.parse(activeUser);
-  };
+  // const connection = () => {
+  //   const activeUser = localStorage.getItem("user");
+  //   JSON.parse(activeUser);
+  // };
 
   const login = async (dataForm) => {
     console.log("Entree dans login");
     console.log(dataForm);
-    S;
 
     setIsLoading(true);
     try {
