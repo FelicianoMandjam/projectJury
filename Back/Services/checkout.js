@@ -21,7 +21,7 @@ const createCheckoutSession = async (req, res) => {
         allowed_countries: ["US", "FR", "GB"],
       },
     });
-    res.status(200).json({ sessionID: session.id });
+    res.status(200).json({ sessionId: session.id });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
