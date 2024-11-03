@@ -42,6 +42,7 @@ const StripeCheckout = () => {
   return (
     <>
       <form onSubmit={handleCheckout}>
+        <label> Votre adresse mail : </label>
         <input
           type="email"
           name="email"
