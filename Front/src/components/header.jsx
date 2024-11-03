@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "../pages/Auth/logout";
+import Blog from "../pages/blog/blog";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
@@ -36,8 +37,6 @@ const Header = () => {
           </Container>
         </Navbar>
       </div>
-
-      <div></div>
     </>
   );
 };

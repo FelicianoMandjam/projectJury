@@ -8,6 +8,7 @@ import Login from "./pages/Auth/login";
 import Register from "./pages/Auth/register";
 import AfterContactSend from "./pages/contact/afterContactSend";
 import Ebook from "./pages/eBook/ebook";
+import Blog from "./pages/blog/blog";
 import StripeCheckout from "./components/stripe/stripe-checkout";
 import StripeSucees from "./components/stripe/success";
 import StripeCanceled from "./components/stripe/canceled";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/canceled" element={<StripeCanceled />} />
           <Route path="/sucess" element={<StripeSucees />} />
           <Route path="/panier" element={<StripeCheckout />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/register" element={<Register />} />
           <Route path="/messageEnvoye" element={<AfterContactSend />} />
         </Routes>
