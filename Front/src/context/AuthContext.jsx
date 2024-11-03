@@ -1,21 +1,43 @@
 import React, { createContext, useState, useEffect } from "react";
 import { URL } from "../URL/URL";
 import axios from "axios";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
 
-  const connection = () => {
-    const activeUser = localStorage.getItem("user");
-    JSON.parse(activeUser);
-  };
+  // const connection = () => {
+  //   const activeUser = localStorage.getItem("user");
+  //   JSON.parse(activeUser);
+  // };
+
+  // const register = async (dataForm) => {
+  //   console.log("Entree dans la function register");
+  //   console.log(dataForm);
+
+  //   setIsLoading(true);
+
+  //   try {
+  //     console.log("Entree dans le try de la function Register");
+  //     const { data, status } = await axios.post(URL.USER_REGISTER, dataForm);
+  //     ///////////////////////////////////////
+  //     console.log("Fin du try de la function register");
+  //     console.log(data);
+  //     /////////////////////////////////////
+
+  //     if (status === 201) {
+  //       console.log("rentree dans l'if === 201");
+  //     }
+  //   } catch (error) {
+  //     console.log("Entree dans le catch de la function Register");
+  //   }
+  // };
 
   const login = async (dataForm) => {
     console.log("Entree dans login");
     console.log(dataForm);
-    S;
 
     setIsLoading(true);
     try {

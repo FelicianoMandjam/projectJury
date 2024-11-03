@@ -11,15 +11,13 @@ const StripeCheckout = () => {
       quantity: 1,
       price_data: {
         currency: "eur",
-        unit_amout: 10,
-
+        unit_amount: 1000,
         product_data: {
-          name: "Produit 1",
-          description: "Produit Description",
+          name: "Jean",
+          description:
+            "Sport et Bien-être : Le Guide Ultime pour une Vie Saine et Équilibrée",
           images: [
-            {
-              img: "https://cdn.pixabay.com/photo/2017/09/13/09/21/hockey-2744912_1280.jpg",
-            },
+            "https://pixabay.com/photos/skateboard-skateboarder-skae-2271295/",
           ],
         },
       },
@@ -29,26 +27,14 @@ const StripeCheckout = () => {
   const handleCheckout = async (e) => {
     e.preventDefault();
     // Line items
-    const line_items = panier.map((article) => {
-      return {
-        quantity: article.quantity,
-        price_data: {
-          currency: "eur",
-          unit_amout: article.price,
-          product_data: {
-            name: article.name,
-            description: article.content,
-            images: [article.picture[0].img],
-          },
-        },
-      };
-    });
+    const line_items = panier;
     // Call API
-    const { sessionID } = await fetchFromApi("create-checkout-session", {
-      body: { line_items, custumer_email: email },
+    console.log(line_items, email);
+    const { sessionId } = await fetchFromApi("create-checkout-session", {
+      body: { line_items, customer_email: email },
     });
 
-    const { error } = await stripe.redirectToCheckout({ sessionID });
+    const { error } = await stripe.redirectToCheckout({ sessionId });
 
     if (error) console.log(error);
   };
@@ -56,13 +42,16 @@ const StripeCheckout = () => {
   return (
     <>
       <form onSubmit={handleCheckout}>
+        <label> Votre adresse mail : </label>
         <input
           type="email"
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          name="email"
+          id="email"
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="email"
           value={email}
         />
-        <button type="submit">Checkout</button>
+        <button type="submit">Acheter</button>
       </form>
     </>
   );

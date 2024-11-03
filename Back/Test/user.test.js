@@ -8,7 +8,7 @@ app.use("/user", userRoute);
 
 describe('Should test all request from API /user"', () => {
   // GET Case is OK: user/showAll
-  it("Should return a array witch a object and a statusCode(200) from the route /user/getAll", async () => {
+  it("Should return a array with a object and a statusCode(200) from the route /user/getAll", async () => {
     const { body, statusCode } = await request(app).get("/user/getAll");
     expect(body).toEqual(
       expect.arrayContaining([
