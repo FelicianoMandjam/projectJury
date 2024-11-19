@@ -6,8 +6,10 @@ const add = async (req, res, next) => {
   try {
     const post = await Post.create(req.body);
     console.log(post);
+
     // Emet un évenement websocvket pour le client
     io.emit("newPublication", post);
+
     res.status(201).json(post);
   } catch (error) {
     console.log(error);

@@ -15,7 +15,7 @@ const Home = () => {
   const [post, setPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [content, setContent] = useState({
-    name: "",
+    title: "",
     content: "",
   });
 
@@ -24,13 +24,26 @@ const Home = () => {
       try {
         console.log("Entree dans la requete ");
         const { data } = await axios.get(URL.POST_GET_ALL);
-        console.log(data);
+        console.log(data.content);
+        setPost(data.content);
         setPost(data);
       } catch (error) {
         console.log("Erreur lors de la requete des posts ");
       }
     };
     fetchPost();
+
+    // Ecoute de l'evenement "newPublication" de webSocket pour mettre a jour la liste de posts
+
+    socket.on("newPublication", (newPublication) => {
+      setPost((prevPost) => [...prevPost, newPublication]);
+    });
+
+    // nettoyage des écouteurs d'évenement lor du demontage du composant
+
+    return () => {
+      socket.off("newPublication");
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -51,15 +64,37 @@ const Home = () => {
   };
   return (
     <>
-      <form onSubmit={handleChange}>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          placeholder="Titre"
+          onChange={handleChange}
+        />
         <input
           type="text"
           name="content"
-          placeholder="post"
+          placeholder="Publication"
           onChange={handleChange}
+        />
+
+        {/* A gerer (multer) */}
+        <input
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/png, image/jpeg"
         />
         <button disabled={isLoading}>Poster</button>
       </form>
+      {post &&
+        post.map((item, index) => (
+          <div key={index}>
+            <h3>{item.title}</h3>
+            <p>{item.content}</p>
+            <p>{item.createdAt}</p>
+          </div>
+        ))}
     </>
   );
 };
