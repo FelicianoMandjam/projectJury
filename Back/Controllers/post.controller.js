@@ -1,11 +1,14 @@
 import { Post } from "../Models/index.js";
+import { io } from "../Services/socket.js";
 
 // POST
 const add = async (req, res, next) => {
   try {
     const post = await Post.create(req.body);
-    res.status(201).json("New Post has been created");
     console.log(post);
+    // Emet un évenement websocvket pour le client
+    io.emit("newPublication", post);
+    res.status(201).json(post);
   } catch (error) {
     console.log(error);
     res.status(500).json("Problem to create the post.");
