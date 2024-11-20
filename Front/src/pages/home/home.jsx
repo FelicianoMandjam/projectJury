@@ -88,13 +88,31 @@ const Home = () => {
         <button disabled={isLoading}>Poster</button>
       </form>
       {post &&
-        post.map((item, index) => (
-          <div key={index}>
-            <h3>{item.title}</h3>
-            <p>{item.content}</p>
-            <p>{item.createdAt}</p>
-          </div>
-        ))}
+        post.map((item, index) => {
+          // Formater la date et l'heure
+          const createdAt = new Date(item.createdAt);
+          const formattedDate = createdAt.toLocaleDateString("fr-FR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          });
+          const formattedTime = createdAt.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          return (
+            <div key={index}>
+              <h3>{item.title}</h3>
+              <p>{item.content}</p>
+              <p>
+                <small className="text-secondary">
+                  {formattedDate} à {formattedTime}{" "}
+                </small>
+              </p>
+            </div>
+          );
+        })}
     </>
   );
 };

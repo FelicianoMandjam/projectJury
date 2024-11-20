@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
+import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   return (
@@ -25,9 +27,18 @@ const Header = () => {
                 </Nav.Link>
                 <Nav.Link href="/ebook">E-BOOK</Nav.Link>
                 <Nav.Link href="/blog">BLOG</Nav.Link>
+                <Nav.Link href="/panier">
+                  <FontAwesomeIcon icon={faBasketShopping} />
+                </Nav.Link>
                 <Nav.Link href="/contact">
                   <FontAwesomeIcon icon={faEnvelope} />
                 </Nav.Link>
+
+                {/* Condition si admin */}
+                <Nav.Link href="/admin/backOffice">
+                  <FontAwesomeIcon icon={faUserTie} />
+                </Nav.Link>
+
                 <Nav.Link href="/connexion">
                   <FontAwesomeIcon icon={faUser} />
                 </Nav.Link>
