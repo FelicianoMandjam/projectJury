@@ -6,6 +6,7 @@ import Home from "./pages/home/home";
 import Contact from "./pages/contact/contact";
 import Login from "./pages/Auth/login";
 import Register from "./pages/Auth/register";
+import BackOffice from "./pages/Admin/backOffice";
 import AfterContactSend from "./pages/contact/afterContactSend";
 import Ebook from "./pages/eBook/ebook";
 import Blog from "./pages/blog/blog";
@@ -24,16 +25,26 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
+          {/* Pages Blog */}
           <Route index path="/" element={<Home />} />
+          <Route path="/blog" element={<Blog />} />
+
+          {/* Contact */}
           <Route path="/contact" element={<Contact />} />
+          <Route path="/messageEnvoye" element={<AfterContactSend />} />
+
+          {/* Connexion */}
           <Route path="/connexion" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* e-commerce */}
           <Route path="/ebook" element={<Ebook />} />
           <Route path="/canceled" element={<StripeCanceled />} />
           <Route path="/sucess" element={<StripeSucees />} />
           <Route path="/panier" element={<StripeCheckout />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/messageEnvoye" element={<AfterContactSend />} />
+
+          {/* Admin */}
+          <Route path="/admin/backOffice" element={<BackOffice />} />
         </Routes>
       </Layout>
     </BrowserRouter>
