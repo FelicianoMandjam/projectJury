@@ -52,12 +52,13 @@ const getById = async (req, res, next) => {
   }
 };
 
+// PUT
 const updateById = async (req, res, next) => {
   try {
     const category = await Category.findByPk(req.params.id);
     await category.update(req.body);
 
-    if (!category) res.status(404).json("User not found !");
+    if (!category) res.status(404).json("Category not found !");
 
     res.status(200).json(category);
   } catch (error) {
@@ -72,7 +73,7 @@ const deletebyId = async (req, res, next) => {
     const category = await Category.destroy({ where: { id: req.params.id } });
     console.log(category);
     if (!category) res.status(404).json("Category not found!");
-    res.status(200).json("User deleted");
+    res.status(200).json("Category deleted");
   } catch (error) {
     console.log(error);
     res.status(500).json("The delete has not work!");
