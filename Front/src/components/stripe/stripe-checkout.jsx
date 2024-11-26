@@ -17,7 +17,7 @@ const StripeCheckout = () => {
           description:
             "Sport et Bien-être : Le Guide Ultime pour une Vie Saine et Équilibrée",
           images: [
-            "https://pixabay.com/photos/skateboard-skateboarder-skae-2271295/",
+            "https://cdn.pixabay.com/photo/2018/07/20/10/38/woman-3550357_1280.jpg",
           ],
         },
       },
