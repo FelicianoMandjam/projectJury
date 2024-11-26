@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from "react";
 import {
   Container,
-  Row,
-  Col,
-  Nav,
-  Navbar,
+  Button,
   Table,
   Form,
   Modal,
-  Button,
+  Navbar,
+  Nav,
 } from "react-bootstrap";
-import { URL } from "../../URL/URL";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { URL } from "../../URL/URL";
 
 const BackOffice = () => {
-  // État pour suivre la section actuellement sélectionnée
-  const [selectedSection, setSelectedSection] = useState("overview");
-
-  // Pour le CRUD
+  // State for Users, Posts, Categories, Products, Comments, and Contacts
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [newUser, setNewUser] = useState({ name: "", email: "" });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [newItem, setNewItem] = useState({ name: "" });
+  const [deleteItem, setDeleteItem] = useState(null);
+  const [activeSection, setActiveSection] = useState("users");
 
-  // Fonction pour mettre à jour la section sélectionnée
-  const handleNavClick = (section) => {
-    setSelectedSection(section);
-  };
-
-  // Recuperer les Users de ma BDD
+  // Load Users from API
   useEffect(() => {
     const fetchUsers = async () => {
       console.log("fetch pour les Users");
@@ -41,70 +38,197 @@ const BackOffice = () => {
         console.log("Error get users", error);
       }
     };
-
     fetchUsers();
   }, []);
 
-  // CRUD : DELETE
-  const handleDeleteUser = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/user/${id}`);
-
-      // A revoir******************** Mettre modal de confirmation
-      if (users.isAdmin == 0) {
-        setUsers(users.filter((user) => user.id !== id));
-      } else {
-        alert("Impossible de supprimer un adim");
+  // Load Posts from API
+  useEffect(() => {
+    const fetchPosts = async () => {
+      console.log("fetch pour les Posts");
+      try {
+        const { data } = await axios.get(URL.POST_GET_ALL);
+        console.log(data);
+        setPosts(data);
+      } catch (error) {
+        console.log("Error get posts", error);
       }
+    };
+    fetchPosts();
+  }, []);
+
+  // Load Categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      console.log("fetch pour les Categories");
+      try {
+        const { data } = await axios.get(URL.CATEGORY_GET_ALL);
+        console.log(data);
+        setCategories(data);
+      } catch (error) {
+        console.log("Error get categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Load Products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      console.log("fetch pour les Produits");
+      try {
+        const { data } = await axios.get(URL.PRODUCT_GET_ALL);
+        console.log(data);
+        setProducts(data);
+      } catch (error) {
+        console.log("Error get products", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // CRUD Handlers for Categories and Products
+  const handleCreateItem = async (type) => {
+    if (!newItem.name) {
+      alert("Le champ nom est obligatoire.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        URL[type.toUpperCase() + "_ADD"],
+        newItem
+      );
+      switch (type) {
+        case "category":
+          setCategories([...categories, response.data]);
+          break;
+        case "product":
+          setProducts([...products, response.data]);
+          break;
+        default:
+          break;
+      }
+      setNewItem({ name: "" });
     } catch (error) {
-      console.log("Error to Delete user", error);
+      console.error(`Erreur lors de la création de l'élément (${type})`, error);
     }
   };
 
-  // CRUD : UPDATE
-  const handleEditUser = (user) => {
-    setSelectedUser(user);
+  const handleDeleteItem = async () => {
+    try {
+      const { type, id } = deleteItem;
+      await axios.delete(`${URL[type.toUpperCase() + "_DELETE"]}/${id}`);
+      switch (type) {
+        case "user":
+          setUsers(users.filter((item) => item.id !== id));
+          break;
+        case "post":
+          setPosts(posts.filter((item) => item.id !== id));
+          break;
+        case "category":
+          setCategories(categories.filter((item) => item.id !== id));
+          break;
+        case "product":
+          setProducts(products.filter((item) => item.id !== id));
+          break;
+        default:
+          break;
+      }
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error(`Erreur lors de la suppression de l'élément`, error);
+    }
+  };
+
+  const handleEditItem = (item) => {
+    setSelectedItem({ ...item });
     setShowModal(true);
   };
 
-  const handleUpdateUser = async () => {
+  const handleUpdateItem = async (type) => {
     try {
-      const { data } = await axios.put(
-        `http://localhost:3001/user/${selectedUser.id}`,
-        selectedUser
+      const response = await axios.put(
+        `${URL[type.toUpperCase() + "_UPDATE"]}/${selectedItem.id}`,
+        selectedItem
       );
-
-      setUsers(
-        users.map((user) => (user.id === selectedUser.id ? data : user))
-      );
+      switch (type) {
+        case "user":
+          setUsers(
+            users.map((item) =>
+              item.id === selectedItem.id ? response.data : item
+            )
+          );
+          break;
+        case "post":
+          setPosts(
+            posts.map((item) =>
+              item.id === selectedItem.id ? response.data : item
+            )
+          );
+          break;
+        case "category":
+          setCategories(
+            categories.map((item) =>
+              item.id === selectedItem.id ? response.data : item
+            )
+          );
+          break;
+        case "product":
+          setProducts(
+            products.map((item) =>
+              item.id === selectedItem.id ? response.data : item
+            )
+          );
+          break;
+        default:
+          break;
+      }
       setShowModal(false);
     } catch (error) {
-      console.log("Erreur lors de la mise à jour de l’utilisateur", error);
+      console.error(
+        `Erreur lors de la mise à jour de l'élément (${type})`,
+        error
+      );
     }
   };
 
-  // Rendu du contenu principal basé sur la section sélectionnée
-  const renderContent = () => {
-    switch (selectedSection) {
-      case "overview":
-        return (
-          <>
-            <h1>Dashboard Overview</h1>
-            <p>
-              Bienvenue sur le tableau de bord de l'administrateur. Choisissez
-              une section à gauche pour commencer.
-            </p>
-          </>
-        );
-      case "users":
-        return (
-          <>
-            <h1>Gestion des Utilisateurs</h1>
-            <p>Ici, tu peux gérer les utilisateurs enregistrés sur le site.</p>
+  const confirmDelete = (type, id) => {
+    setDeleteItem({ type, id });
+    setShowDeleteModal(true);
+  };
+
+  return (
+    <div className="d-flex">
+      <Navbar
+        bg="secondary"
+        variant="dark"
+        className="flex-column p-3"
+        style={{ height: "100vh", width: "250px" }}
+      >
+        <Navbar.Brand> Dashboard </Navbar.Brand>
+        <Nav className="flex-column">
+          <Nav.Link onClick={() => setActiveSection("users")}>
+            Gestion des Utilisateurs
+          </Nav.Link>
+          <Nav.Link onClick={() => setActiveSection("posts")}>
+            Gestion des Publications
+          </Nav.Link>
+          <Nav.Link onClick={() => setActiveSection("categories")}>
+            Gestion des Catégories
+          </Nav.Link>
+          <Nav.Link onClick={() => setActiveSection("products")}>
+            Gestion des Produits
+          </Nav.Link>
+        </Nav>
+      </Navbar>
+      <Container>
+        <h1>Gestion des Utilisateurs, Publications, Catégories, et Produits</h1>
+        {activeSection === "users" && (
+          <div>
+            <h2>Gestion des Utilisateurs</h2>
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Username</th>
+                  <th>Nom d'utilisateur</th>
                   <th>Prénom</th>
                   <th>Nom</th>
                   <th>Email</th>
@@ -121,13 +245,13 @@ const BackOffice = () => {
                     <td>
                       <Button
                         variant="warning"
-                        onClick={() => handleEditUser(user)}
+                        onClick={() => handleEditItem(user)}
                       >
                         Modifier
-                      </Button>
+                      </Button>{" "}
                       <Button
                         variant="danger"
-                        onClick={() => handleDeleteUser(user.id)}
+                        onClick={() => confirmDelete("user", user.id)}
                       >
                         Supprimer
                       </Button>
@@ -136,35 +260,234 @@ const BackOffice = () => {
                 ))}
               </tbody>
             </Table>
+          </div>
+        )}
 
-            {/* Modal pour mettre à jour un utilisateur */}
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-              <Modal.Header closeButton>
-                <Modal.Title>Modifier Utilisateur</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form>
-                  <Form.Group controlId="formEditFirstName">
+        {activeSection === "posts" && (
+          <div>
+            <h2>Gestion des Publications</h2>
+            <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Titre</th>
+                    <th>Contenu</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {posts.map((post) => (
+                    <tr key={post.id}>
+                      <td>{post.title}</td>
+                      <td>{post.content}</td>
+                      <td>
+                        <Button
+                          variant="warning"
+                          onClick={() => handleEditItem(post)}
+                        >
+                          Modifier
+                        </Button>{" "}
+                        <Button
+                          variant="danger"
+                          onClick={() => confirmDelete("post", post.id)}
+                        >
+                          Supprimer
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        )}
+
+        {activeSection === "categories" && (
+          <div>
+            <h2>Gestion des Catégories</h2>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((category) => (
+                  <tr key={category.id}>
+                    <td>{category.name}</td>
+                    <td>
+                      <Button
+                        variant="warning"
+                        onClick={() => handleEditItem(category)}
+                      >
+                        Modifier
+                      </Button>{" "}
+                      <Button
+                        variant="danger"
+                        onClick={() => confirmDelete("category", category.id)}
+                      >
+                        Supprimer
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Form>
+              <Form.Group controlId="formItemName">
+                <Form.Label>Nom</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Entrez le nom"
+                  value={newItem.name}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, name: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                onClick={() => handleCreateItem("category")}
+              >
+                Créer Catégorie
+              </Button>
+            </Form>
+          </div>
+        )}
+
+        {activeSection === "products" && (
+          <div>
+            <h2>Gestion des Produits</h2>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Prix</th>
+                  <th>Description</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.price}</td>
+                    <td>{product.description}</td>
+                    <td>{product.stock}</td>
+                    <td>
+                      <Button
+                        variant="warning"
+                        onClick={() => handleEditItem(product)}
+                      >
+                        Modifier
+                      </Button>{" "}
+                      <Button
+                        variant="danger"
+                        onClick={() => confirmDelete("product", product.id)}
+                      >
+                        Supprimer
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Form>
+              <Form.Group controlId="formProductName">
+                <Form.Label>Nom</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Entrez le nom"
+                  value={newItem.name}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, name: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Form.Group controlId="formProductPrice">
+                <Form.Label>Prix</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Entrez le prix"
+                  value={newItem.price || ""}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, price: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Form.Group controlId="formProductDescription">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Entrez une description"
+                  value={newItem.description || ""}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, description: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Form.Group controlId="formProductStock">
+                <Form.Label>Stock</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Entrez le stock"
+                  value={newItem.stock || ""}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, stock: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                onClick={() => handleCreateItem("product")}
+              >
+                Créer Produit
+              </Button>
+            </Form>
+          </div>
+        )}
+
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modifier l'Élément</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="formEditItemName">
+                <Form.Label>Nom</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={selectedItem?.name || ""}
+                  onChange={(e) =>
+                    setSelectedItem({ ...selectedItem, name: e.target.value })
+                  }
+                />
+              </Form.Group>
+              {activeSection === "users" && (
+                <>
+                  <Form.Group controlId="formEditUserFirstName">
                     <Form.Label>Prénom</Form.Label>
                     <Form.Control
                       type="text"
-                      value={selectedUser?.firstName || ""}
+                      value={selectedItem?.firstName || ""}
                       onChange={(e) =>
-                        setSelectedUser({
-                          ...selectedUser,
+                        setSelectedItem({
+                          ...selectedItem,
                           firstName: e.target.value,
                         })
                       }
                     />
                   </Form.Group>
-                  <Form.Group controlId="formEditLastName">
+                  <Form.Group controlId="formEditUserLastName">
                     <Form.Label>Nom</Form.Label>
                     <Form.Control
                       type="text"
-                      value={selectedUser?.lastName || ""}
+                      value={selectedItem?.lastName || ""}
                       onChange={(e) =>
-                        setSelectedUser({
-                          ...selectedUser,
+                        setSelectedItem({
+                          ...selectedItem,
                           lastName: e.target.value,
                         })
                       }
@@ -174,128 +497,129 @@ const BackOffice = () => {
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                       type="email"
-                      value={selectedUser?.email || ""}
+                      value={selectedItem?.email || ""}
                       onChange={(e) =>
-                        setSelectedUser({
-                          ...selectedUser,
+                        setSelectedItem({
+                          ...selectedItem,
                           email: e.target.value,
                         })
                       }
                     />
                   </Form.Group>
-                </Form>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShowModal(false)}>
-                  Annuler
-                </Button>
-                <Button variant="primary" onClick={handleUpdateUser}>
-                  Mettre à jour
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </>
-        );
-      case "posts":
-        return (
-          <>
-            <h1>Gestion des Publications</h1>
-            <p>Gère les publications créées par les utilisateurs ici.</p>
-            {/* Ajoute le composant ou le contenu de gestion des publications */}
-          </>
-        );
-      case "categories":
-        return (
-          <>
-            <h1>Gestion des Catégories</h1>
-            <p>Crée, modifie ou supprime des catégories ici.</p>
-            {/* Ajoute le composant ou le contenu de gestion des catégories */}
-          </>
-        );
-      case "products":
-        return (
-          <>
-            <h1>Gestion des Produits</h1>
-            <p>Gère les produits ici.</p>
-            {/* Ajoute le composant ou le contenu de gestion des produits */}
-          </>
-        );
-      case "settings":
-        return (
-          <>
-            <h1>Paramètres</h1>
-            <p>Gère les paramètres du site ici.</p>
-            {/* Ajoute le composant ou le contenu des paramètres */}
-          </>
-        );
-      default:
-        return (
-          <>
-            <h1>Dashboard Overview</h1>
-            <p>
-              Bienvenue sur le tableau de bord de l'administrateur. Choisissez
-              une section à gauche pour commencer.
-            </p>
-          </>
-        );
-    }
-  };
+                </>
+              )}
+              {activeSection === "posts" && (
+                <>
+                  <Form.Group controlId="formEditPostTitle">
+                    <Form.Label>Titre</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={selectedItem?.title || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          title: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formEditPostContent">
+                    <Form.Label>Contenu</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      value={selectedItem?.content || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          content: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                </>
+              )}
+              {activeSection === "products" && (
+                <>
+                  <Form.Group controlId="formEditProductPrice">
+                    <Form.Label>Prix</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={selectedItem?.price || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          price: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formEditProductDescription">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={selectedItem?.description || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formEditProductStock">
+                    <Form.Label>Stock</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={selectedItem?.stock || ""}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          stock: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                </>
+              )}
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Annuler
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => handleUpdateItem(activeSection)}
+            >
+              Mettre à jour
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-  return (
-    <Container fluid>
-      <Row>
-        {/* Sidebar */}
-        <Col xs={2} id="sidebar" className="bg-light vh-100">
-          <Navbar
-            bg="light"
-            expand="lg"
-            className="flex-column align-items-start"
-          >
-            <Navbar.Brand href="#home">Admin Dashboard</Navbar.Brand>
-            <Nav className="flex-column w-100">
-              <Nav.Link
-                href="#overview"
-                onClick={() => handleNavClick("overview")}
-              >
-                Overview
-              </Nav.Link>
-              <Nav.Link href="#users" onClick={() => handleNavClick("users")}>
-                User
-              </Nav.Link>
-              <Nav.Link href="#posts" onClick={() => handleNavClick("posts")}>
-                Posts
-              </Nav.Link>
-              <Nav.Link
-                href="#categories"
-                onClick={() => handleNavClick("categories")}
-              >
-                Categories
-              </Nav.Link>
-              <Nav.Link
-                href="#products"
-                onClick={() => handleNavClick("products")}
-              >
-                Products
-              </Nav.Link>
-              <Nav.Link
-                href="#settings"
-                onClick={() => handleNavClick("settings")}
-              >
-                Settings
-              </Nav.Link>
-            </Nav>
-          </Navbar>
-        </Col>
-
-        {/* Main Content */}
-        <Col xs={10} id="main-content">
-          <Navbar bg="light" className="mb-4">
-            <Navbar.Text>Welcome Admin</Navbar.Text>
-          </Navbar>
-          <Container>{renderContent()}</Container>
-        </Col>
-      </Row>
-    </Container>
+        {/* Modal for Confirming Deletion */}
+        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation de Suppression</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Voulez-vous vraiment supprimer cet élément ? Cette action est
+            irréversible.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              Annuler
+            </Button>
+            <Button variant="danger" onClick={handleDeleteItem}>
+              Supprimer
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Container>
+    </div>
   );
 };
 
