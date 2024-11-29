@@ -25,7 +25,18 @@ commentsModel(connection, Sequelize);
 const { User, Product, Contact, Category, Post, Comment } = connection.models;
 
 // Les relations
+//
+Category.hasMany(Post, { foreignKey: "categoryId", as: "posts" });
+Post.belongsTo(Category, { foreignKey: "categoryId", as: "category" });
 
+Post.hasMany(Comment, { foreignKey: "postId", as: "comments" });
+Comment.belongsTo(Post, { foreignKey: "postId", as: "post" });
+
+User.hasMany(Post, { foreignKey: "userId", as: "posts" });
+Post.belongsTo(User, { foreignKey: "userId", as: "author" });
+
+User.hasMany(Comment, { foreignKey: "userId", as: "comments" });
+Comment.belongsTo(User, { foreignKey: "userId", as: "author" });
 /*  
             Post
  hasOne : Category , User 

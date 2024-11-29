@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Form from "react-bootstrap/Form";
 import axios from "axios";
 
 // URL
@@ -64,29 +65,6 @@ const Home = () => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Titre"
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="content"
-          placeholder="Publication"
-          onChange={handleChange}
-        />
-
-        {/* A gerer (multer) */}
-        <input
-          type="file"
-          id="avatar"
-          name="avatar"
-          accept="image/png, image/jpeg"
-        />
-        <button disabled={isLoading}>Poster</button>
-      </form>
       {post &&
         post.map((item, index) => {
           // Formater la date et l'heure
@@ -102,15 +80,23 @@ const Home = () => {
           });
 
           return (
-            <div key={index}>
-              <h3>{item.title}</h3>
-              <p>{item.content}</p>
-              <p>
-                <small className="text-secondary">
-                  {formattedDate} à {formattedTime}{" "}
-                </small>
-              </p>
-            </div>
+            <>
+              <div key={index}>
+                <h3>{item.title}</h3>
+                <p>{item.content}</p>
+                <p>
+                  <small className="text-secondary">
+                    {formattedDate} à {formattedTime}{" "}
+                  </small>
+                </p>
+                <Form>
+                  <Form.Group className="mb-3" controlId="">
+                    <Form.Label>Commentaire</Form.Label>
+                    <Form.Control as="textarea" rows={3} />
+                  </Form.Group>
+                </Form>
+              </div>
+            </>
           );
         })}
     </>
