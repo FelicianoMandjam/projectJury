@@ -17,7 +17,6 @@ export const URL = {
   POST_UPDATE: "http://localhost:3001/post",
 
   //  Category
-
   CATEGORY_ADD: "http://localhost:3001/category/add",
   CATEGORY_GET_ALL: "http://localhost:3001/category/getAll",
   CATEGORY_GET_ONE: "http://localhost:3001/category/getOne",
@@ -34,7 +33,6 @@ export const URL = {
   PRODUCT_UPDATE: "http://localhost:3001/product",
 
   //   Comments
-
   COMMENT_ADD: "http://localhost:3001/comment/add",
   COMMENT_GET_ALL: "http://localhost:3001/comment/getAll",
   COMMENT_GET_ONE_BYID: "http://localhost:3001/comment",
