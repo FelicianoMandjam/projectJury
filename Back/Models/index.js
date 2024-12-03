@@ -25,7 +25,7 @@ commentsModel(connection, Sequelize);
 const { User, Product, Contact, Category, Post, Comment } = connection.models;
 
 // Les relations
-//
+
 Category.hasMany(Post, { foreignKey: "categoryId", as: "posts" });
 Post.belongsTo(Category, { foreignKey: "categoryId", as: "category" });
 
@@ -37,21 +37,6 @@ Post.belongsTo(User, { foreignKey: "userId", as: "author" });
 
 User.hasMany(Comment, { foreignKey: "userId", as: "comments" });
 Comment.belongsTo(User, { foreignKey: "userId", as: "author" });
-/*  
-            Post
- hasOne : Category , User 
- hasMany : Comment
- 
-            Contact
- if !guest : hasOne: User
-
-            Comment
-    hasOne : User , Post
-
-           Category
-  hasMany : Post 
- 
- */
 
 await connection.sync({ alter: false, force: false });
 console.log("Synchro Ok INDEx.js");
