@@ -1,10 +1,19 @@
-import { Post } from "../Models/index.js";
+import { Post, Category } from "../Models/index.js";
 import { io } from "../Services/socket.js";
 
 // POST
 const add = async (req, res, next) => {
   try {
-    const post = await Post.create(req.body);
+    const post = await Post.create({
+      ...req.body,
+      include: [
+        {
+          model: Category,
+          as: "category", // Alias correspondant à la relation
+          attributes: ["id", "name"], // Champs spécifiques de la catégorie
+        },
+      ],
+    });
     console.log(post);
 
     // Emet un évenement websocvket pour le client
@@ -21,7 +30,16 @@ const add = async (req, res, next) => {
 // GET
 const getAll = async (req, res, next) => {
   try {
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Category,
+          as: "category", // Model/index.js ce que je declare dans les relations
+          attributes: ["id", "name"], //champs nécessaires
+        },
+      ],
+    });
     console.log(posts);
     if (!posts) res.status(404).json("No Post find!");
     res.status(200).json(posts);
