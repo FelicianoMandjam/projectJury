@@ -12,25 +12,38 @@ const socket = io("http://localhost:3001");
 const Blog = () => {
   // Pour afficher les articles socket.IO d'abort
   const [post, setPost] = useState([]);
+  const [category, setCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [content, setContent] = useState({
     title: "",
     content: "",
+    categoryId: "",
   });
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        console.log("Entree dans la requete ");
+        console.log("Entree dans la requetepour les post");
         const { data } = await axios.get(URL.POST_GET_ALL);
         console.log(data.content);
         setPost(data.content);
         setPost(data);
       } catch (error) {
-        console.log("Erreur lors de la requete des posts ");
+        console.log("Erreur lors de la requete des posts", error);
+      }
+    };
+
+    const fetchCategory = async () => {
+      try {
+        console.log("Entree dans le fetch de la category");
+        const { data } = await axios.get(URL.CATEGORY_GET_ALL);
+        setCategory(data);
+      } catch (error) {
+        console.log("Erreur lors la requete des categorys", error);
       }
     };
     fetchPost();
+    fetchCategory();
 
     // Ecoute de l'evenement "newPublication" de webSocket pour mettre a jour la liste de posts
 
@@ -71,13 +84,26 @@ const Blog = () => {
           placeholder="Titre"
           onChange={handleChange}
         />
-        <input
+        <textarea
           type="text"
           name="content"
           placeholder="Publication"
+          size="50"
           onChange={handleChange}
         />
-
+        <select
+          name="categoryId"
+          value={content.categoryId}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Catégorie</option>
+          {category.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
         {/* A gerer (multer) */}
         <input
           type="file"
@@ -85,6 +111,7 @@ const Blog = () => {
           name="avatar"
           accept="image/png, image/jpeg"
         />
+
         <button disabled={isLoading}>Poster</button>
       </form>
       {post &&

@@ -15,6 +15,10 @@ export default (connection, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      categoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: false, // Assurez-vous que cette clé étrangère est obligatoire
+      },
     },
     {
       timestamp: true,
