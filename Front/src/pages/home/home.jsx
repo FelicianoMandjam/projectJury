@@ -91,7 +91,7 @@ const Home = () => {
                 </p>
                 <Form>
                   <Form.Group className="mb-3" controlId="">
-                    <Form.Label>Commentaire</Form.Label>
+                    <Form.Label>Commentaires</Form.Label>
                     <Form.Control as="textarea" rows={3} />
                   </Form.Group>
                 </Form>
