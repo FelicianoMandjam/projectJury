@@ -35,10 +35,10 @@ Comment.belongsTo(Post, { foreignKey: "postId", as: "post" });
 User.hasMany(Post, { foreignKey: "userId", as: "posts" });
 Post.belongsTo(User, { foreignKey: "userId", as: "author" });
 
+Comment.belongsTo(User, { foreignKey: "userId", as: "user" });
 User.hasMany(Comment, { foreignKey: "userId", as: "comments" });
-Comment.belongsTo(User, { foreignKey: "userId", as: "author" });
 
-await connection.sync({ alter: false, force: false });
+await connection.sync({ alter: true, force: false });
 console.log("Synchro Ok INDEx.js");
 
 // export default connection.models
