@@ -110,9 +110,14 @@ export const AuthProvider = ({ children }) => {
   // Vérifie si l'utilisateur est connecté
   const isAuthenticated = !!user;
 
+  // Vérifie si l'utilisateur est un admin
+  const isAdmin = () => {
+    return user?.isAdmin === true; // Vérifie le champ `isAdmin`
+  };
+
   return (
     <AuthContext.Provider
-      value={{ login, logout, user, isLoading, isAuthenticated }}
+      value={{ login, logout, user, isLoading, isAuthenticated, isAdmin }}
     >
       {children}
     </AuthContext.Provider>
