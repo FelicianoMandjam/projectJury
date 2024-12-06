@@ -35,6 +35,7 @@ const Blog = () => {
     const fetchPost = async () => {
       try {
         const { data } = await axios.get(URL.POST_GET_ALL);
+        console.log(data);
         setPost(data); // Met à jour avec tous les posts
       } catch (error) {
         console.log("Erreur lors de la récupération des posts :", error);
@@ -184,6 +185,15 @@ const Blog = () => {
 
             return (
               <Card key={index} className="mb-3">
+                {/* Condition pour afficher l'image si elle est présente */}
+                {item.image && (
+                  <Card.Img
+                    variant="top"
+                    src={item.image} // URL de l'image de la publication
+                    alt="Image de la publication"
+                    style={{ maxHeight: "200px", objectFit: "cover" }}
+                  />
+                )}
                 <Card.Body>
                   <Card.Title>{item.title}</Card.Title>
                   <Card.Text>{item.content}</Card.Text>
