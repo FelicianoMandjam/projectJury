@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "../pages/Auth/logout";
 import Blog from "../pages/blog/blog";
+
+import { AuthContext } from "../context/AuthContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
@@ -13,6 +15,7 @@ import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
+  const { isAdmin, isAuthenticated } = useContext(AuthContext);
   return (
     <>
       <div className="header">
@@ -34,15 +37,20 @@ const Header = () => {
                   <FontAwesomeIcon icon={faEnvelope} />
                 </Nav.Link>
 
-                {/* Condition si admin */}
-                <Nav.Link href="/admin/backOffice">
-                  <FontAwesomeIcon icon={faUserTie} />
-                </Nav.Link>
-
                 <Nav.Link href="/connexion">
                   <FontAwesomeIcon icon={faUser} />
                 </Nav.Link>
-                <Logout />
+
+                {isAdmin() && (
+                  <Nav.Link href="/admin/backOffice">
+                    <FontAwesomeIcon className="text-danger" icon={faUserTie} />
+                  </Nav.Link>
+                )}
+                {isAuthenticated && (
+                  <div className="d-flex">
+                    <Logout />
+                  </div>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -51,5 +59,4 @@ const Header = () => {
     </>
   );
 };
-
 export default Header;

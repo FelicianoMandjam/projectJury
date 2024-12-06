@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { URL } from "../../URL/URL";
+import { AuthContext } from "../../context/AuthContext";
 
 const BackOffice = () => {
   // State for Users, Posts, Categories, Products, Comments, and Contacts
@@ -18,6 +19,8 @@ const BackOffice = () => {
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+
+  const { isAdmin } = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -196,100 +199,65 @@ const BackOffice = () => {
     setShowDeleteModal(true);
   };
 
-  return (
-    <div className="d-flex">
-      <Navbar
-        bg="secondary"
-        variant="dark"
-        className="flex-column p-3"
-        style={{ height: "100vh", width: "250px" }}
-      >
-        <Navbar.Brand> Dashboard </Navbar.Brand>
-        <Nav className="flex-column">
-          <Nav.Link onClick={() => setActiveSection("users")}>
-            Gestion des Utilisateurs
-          </Nav.Link>
-          <Nav.Link onClick={() => setActiveSection("posts")}>
-            Gestion des Publications
-          </Nav.Link>
-          <Nav.Link onClick={() => setActiveSection("categories")}>
-            Gestion des Catégories
-          </Nav.Link>
-          <Nav.Link onClick={() => setActiveSection("products")}>
-            Gestion des Produits
-          </Nav.Link>
-        </Nav>
-      </Navbar>
-      <Container>
-        <h1>Gestion des Utilisateurs, Publications, Catégories, et Produits</h1>
-        {activeSection === "users" && (
-          <div>
-            <h2>Gestion des Utilisateurs</h2>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Nom d'utilisateur</th>
-                  <th>Prénom</th>
-                  <th>Nom</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.username}</td>
-                    <td>{user.firstName}</td>
-                    <td>{user.lastName}</td>
-                    <td>{user.email}</td>
-                    <td>
-                      <Button
-                        variant="warning"
-                        onClick={() => handleEditItem(user)}
-                      >
-                        Modifier
-                      </Button>{" "}
-                      <Button
-                        variant="danger"
-                        onClick={() => confirmDelete("user", user.id)}
-                      >
-                        Supprimer
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </div>
-        )}
-
-        {activeSection === "posts" && (
-          <div>
-            <h2>Gestion des Publications</h2>
-            <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
+  if (isAdmin()) {
+    return (
+      <div className="d-flex">
+        <Navbar
+          bg="secondary"
+          variant="dark"
+          className="flex-column p-3"
+          style={{ height: "100vh", width: "250px" }}
+        >
+          <Navbar.Brand> Dashboard </Navbar.Brand>
+          <Nav className="flex-column">
+            <Nav.Link onClick={() => setActiveSection("users")}>
+              Gestion des Utilisateurs
+            </Nav.Link>
+            <Nav.Link onClick={() => setActiveSection("posts")}>
+              Gestion des Publications
+            </Nav.Link>
+            <Nav.Link onClick={() => setActiveSection("categories")}>
+              Gestion des Catégories
+            </Nav.Link>
+            <Nav.Link onClick={() => setActiveSection("products")}>
+              Gestion des Produits
+            </Nav.Link>
+          </Nav>
+        </Navbar>
+        <Container>
+          <h1>
+            Gestion des Utilisateurs, Publications, Catégories, et Produits
+          </h1>
+          {activeSection === "users" && (
+            <div>
+              <h2>Gestion des Utilisateurs</h2>
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>Titre</th>
-                    <th>Contenu</th>
+                    <th>Nom d'utilisateur</th>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Email</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {posts.map((post) => (
-                    <tr key={post.id}>
-                      <td>{post.title}</td>
-                      <td>{post.content}</td>
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.username}</td>
+                      <td>{user.firstName}</td>
+                      <td>{user.lastName}</td>
+                      <td>{user.email}</td>
                       <td>
                         <Button
                           variant="warning"
-                          onClick={() => handleEditItem(post)}
+                          onClick={() => handleEditItem(user)}
                         >
                           Modifier
                         </Button>{" "}
                         <Button
                           variant="danger"
-                          onClick={() => confirmDelete("post", post.id)}
+                          onClick={() => confirmDelete("user", user.id)}
                         >
                           Supprimer
                         </Button>
@@ -299,328 +267,379 @@ const BackOffice = () => {
                 </tbody>
               </Table>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeSection === "categories" && (
-          <div>
-            <h2>Gestion des Catégories</h2>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((category) => (
-                  <tr key={category.id}>
-                    <td>{category.name}</td>
-                    <td>
-                      <Button
-                        variant="warning"
-                        onClick={() => handleEditItem(category)}
-                      >
-                        Modifier
-                      </Button>{" "}
-                      <Button
-                        variant="danger"
-                        onClick={() => confirmDelete("category", category.id)}
-                      >
-                        Supprimer
-                      </Button>
-                    </td>
+          {activeSection === "posts" && (
+            <div>
+              <h2>Gestion des Publications</h2>
+              <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Titre</th>
+                      <th>Contenu</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {posts.map((post) => (
+                      <tr key={post.id}>
+                        <td>{post.title}</td>
+                        <td>{post.content}</td>
+                        <td>
+                          <Button
+                            variant="warning"
+                            onClick={() => handleEditItem(post)}
+                          >
+                            Modifier
+                          </Button>{" "}
+                          <Button
+                            variant="danger"
+                            onClick={() => confirmDelete("post", post.id)}
+                          >
+                            Supprimer
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+          )}
+
+          {activeSection === "categories" && (
+            <div>
+              <h2>Gestion des Catégories</h2>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-            <Form>
-              <Form.Group controlId="formItemName">
-                <Form.Label>Nom</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Entrez le nom"
-                  value={newItem.name}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, name: e.target.value })
-                  }
-                />
-              </Form.Group>
+                </thead>
+                <tbody>
+                  {categories.map((category) => (
+                    <tr key={category.id}>
+                      <td>{category.name}</td>
+                      <td>
+                        <Button
+                          variant="warning"
+                          onClick={() => handleEditItem(category)}
+                        >
+                          Modifier
+                        </Button>{" "}
+                        <Button
+                          variant="danger"
+                          onClick={() => confirmDelete("category", category.id)}
+                        >
+                          Supprimer
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Form>
+                <Form.Group controlId="formItemName">
+                  <Form.Label>Nom</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Entrez le nom"
+                    value={newItem.name}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, name: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  onClick={() => handleCreateItem("category")}
+                >
+                  Créer Catégorie
+                </Button>
+              </Form>
+            </div>
+          )}
+
+          {activeSection === "products" && (
+            <div>
+              <h2>Gestion des Produits</h2>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Description</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product.id}>
+                      <td>{product.name}</td>
+                      <td>{product.price}</td>
+                      <td>{product.description}</td>
+                      <td>{product.stock}</td>
+                      <td>
+                        <Button
+                          variant="warning"
+                          onClick={() => handleEditItem(product)}
+                        >
+                          Modifier
+                        </Button>{" "}
+                        <Button
+                          variant="danger"
+                          onClick={() => confirmDelete("product", product.id)}
+                        >
+                          Supprimer
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Form>
+                <Form.Group controlId="formProductName">
+                  <Form.Label>Nom</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Entrez le nom"
+                    value={newItem.name}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, name: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group controlId="formProductPrice">
+                  <Form.Label>Prix</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Entrez le prix"
+                    value={newItem.price || ""}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, price: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group controlId="formProductDescription">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Entrez une description"
+                    value={newItem.description || ""}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, description: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group controlId="formProductStock">
+                  <Form.Label>Stock</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Entrez le stock"
+                    value={newItem.stock || ""}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, stock: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  onClick={() => handleCreateItem("product")}
+                >
+                  Créer Produit
+                </Button>
+              </Form>
+            </div>
+          )}
+
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Modifier l'Élément</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group controlId="formEditItemName">
+                  <Form.Label>Nom</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={selectedItem?.name || ""}
+                    onChange={(e) =>
+                      setSelectedItem({ ...selectedItem, name: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                {activeSection === "users" && (
+                  <>
+                    <Form.Group controlId="formEditUserFirstName">
+                      <Form.Label>Prénom</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={selectedItem?.firstName || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            firstName: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formEditUserLastName">
+                      <Form.Label>Nom</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={selectedItem?.lastName || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            lastName: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formEditUserEmail">
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control
+                        type="email"
+                        value={selectedItem?.email || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            email: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                  </>
+                )}
+                {activeSection === "posts" && (
+                  <>
+                    <Form.Group controlId="formEditPostTitle">
+                      <Form.Label>Titre</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={selectedItem?.title || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            title: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formEditPostContent">
+                      <Form.Label>Contenu</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={selectedItem?.content || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            content: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                  </>
+                )}
+                {activeSection === "products" && (
+                  <>
+                    <Form.Group controlId="formEditProductPrice">
+                      <Form.Label>Prix</Form.Label>
+                      <Form.Control
+                        type="number"
+                        value={selectedItem?.price || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            price: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formEditProductDescription">
+                      <Form.Label>Description</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={selectedItem?.description || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            description: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formEditProductStock">
+                      <Form.Label>Stock</Form.Label>
+                      <Form.Control
+                        type="number"
+                        value={selectedItem?.stock || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            stock: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+                  </>
+                )}
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Annuler
+              </Button>
               <Button
                 variant="primary"
-                onClick={() => handleCreateItem("category")}
+                onClick={() => handleUpdateItem(activeSection)}
               >
-                Créer Catégorie
+                Mettre à jour
               </Button>
-            </Form>
-          </div>
-        )}
+            </Modal.Footer>
+          </Modal>
 
-        {activeSection === "products" && (
-          <div>
-            <h2>Gestion des Produits</h2>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Prix</th>
-                  <th>Description</th>
-                  <th>Stock</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td>{product.name}</td>
-                    <td>{product.price}</td>
-                    <td>{product.description}</td>
-                    <td>{product.stock}</td>
-                    <td>
-                      <Button
-                        variant="warning"
-                        onClick={() => handleEditItem(product)}
-                      >
-                        Modifier
-                      </Button>{" "}
-                      <Button
-                        variant="danger"
-                        onClick={() => confirmDelete("product", product.id)}
-                      >
-                        Supprimer
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-            <Form>
-              <Form.Group controlId="formProductName">
-                <Form.Label>Nom</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Entrez le nom"
-                  value={newItem.name}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, name: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group controlId="formProductPrice">
-                <Form.Label>Prix</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Entrez le prix"
-                  value={newItem.price || ""}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, price: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group controlId="formProductDescription">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Entrez une description"
-                  value={newItem.description || ""}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, description: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group controlId="formProductStock">
-                <Form.Label>Stock</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Entrez le stock"
-                  value={newItem.stock || ""}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, stock: e.target.value })
-                  }
-                />
-              </Form.Group>
+          {/* Modal for Confirming Deletion */}
+          <Modal
+            show={showDeleteModal}
+            onHide={() => setShowDeleteModal(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirmation de Suppression</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Voulez-vous vraiment supprimer cet élément ? Cette action est
+              irréversible.
+            </Modal.Body>
+            <Modal.Footer>
               <Button
-                variant="primary"
-                onClick={() => handleCreateItem("product")}
+                variant="secondary"
+                onClick={() => setShowDeleteModal(false)}
               >
-                Créer Produit
+                Annuler
               </Button>
-            </Form>
-          </div>
-        )}
-
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modifier l'Élément</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group controlId="formEditItemName">
-                <Form.Label>Nom</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={selectedItem?.name || ""}
-                  onChange={(e) =>
-                    setSelectedItem({ ...selectedItem, name: e.target.value })
-                  }
-                />
-              </Form.Group>
-              {activeSection === "users" && (
-                <>
-                  <Form.Group controlId="formEditUserFirstName">
-                    <Form.Label>Prénom</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={selectedItem?.firstName || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          firstName: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formEditUserLastName">
-                    <Form.Label>Nom</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={selectedItem?.lastName || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          lastName: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formEditUserEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      value={selectedItem?.email || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          email: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                </>
-              )}
-              {activeSection === "posts" && (
-                <>
-                  <Form.Group controlId="formEditPostTitle">
-                    <Form.Label>Titre</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={selectedItem?.title || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          title: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formEditPostContent">
-                    <Form.Label>Contenu</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      value={selectedItem?.content || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          content: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                </>
-              )}
-              {activeSection === "products" && (
-                <>
-                  <Form.Group controlId="formEditProductPrice">
-                    <Form.Label>Prix</Form.Label>
-                    <Form.Control
-                      type="number"
-                      value={selectedItem?.price || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          price: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formEditProductDescription">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={selectedItem?.description || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formEditProductStock">
-                    <Form.Label>Stock</Form.Label>
-                    <Form.Control
-                      type="number"
-                      value={selectedItem?.stock || ""}
-                      onChange={(e) =>
-                        setSelectedItem({
-                          ...selectedItem,
-                          stock: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                </>
-              )}
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
-              Annuler
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => handleUpdateItem(activeSection)}
-            >
-              Mettre à jour
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Modal for Confirming Deletion */}
-        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Confirmation de Suppression</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Voulez-vous vraiment supprimer cet élément ? Cette action est
-            irréversible.
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => setShowDeleteModal(false)}
-            >
-              Annuler
-            </Button>
-            <Button variant="danger" onClick={handleDeleteItem}>
-              Supprimer
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Container>
-    </div>
-  );
+              <Button variant="danger" onClick={handleDeleteItem}>
+                Supprimer
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Container>
+      </div>
+    );
+  } else {
+    return (
+      <h1 className="title">
+        Vous n'avez pas accées a cette page. Veuillez{" "}
+        <a className="link text-danger" href="/contact">
+          contacter
+        </a>{" "}
+        l'admistrateur du site pour toute information.
+      </h1>
+    );
+  }
 };
-
 export default BackOffice;

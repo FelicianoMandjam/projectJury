@@ -1,4 +1,4 @@
-import { Post, Category } from "../Models/index.js";
+import { Post, Category, Comment } from "../Models/index.js";
 import { io } from "../Services/socket.js";
 
 // POST
@@ -38,7 +38,13 @@ const getAll = async (req, res, next) => {
           as: "category", // Model/index.js ce que je declare dans les relations
           attributes: ["id", "name"], //champs nécessaires
         },
+        {
+          model: Comment,
+          as: "comments",
+        },
       ],
+      order: [["createdAt", "DESC"]],
+      limit: 3,
     });
     console.log(posts);
     if (!posts) res.status(404).json("No Post find!");

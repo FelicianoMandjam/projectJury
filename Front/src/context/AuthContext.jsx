@@ -1,3 +1,65 @@
+// import React, { createContext, useState, useEffect } from "react";
+// import { URL } from "../URL/URL";
+// import axios from "axios";
+
+// export const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [user, setUser] = useState(null);
+
+//   // Vérifie si un utilisateur est connecté
+//   useEffect(() => {
+//     const initializeUser = () => {
+//       const storedUser = localStorage.getItem("user");
+//       if (storedUser) {
+//         setUser(JSON.parse(storedUser));
+//       }
+//     };
+//     initializeUser();
+//   }, []);
+
+//   // Connexion
+//   const login = async (dataForm) => {
+//     console.log("Entree dans login");
+//     console.log(dataForm);
+
+//     setIsLoading(true);
+//     try {
+//       console.log("Entrée dans le try de la fonction login");
+
+//       const { data, status } = await axios.post(URL.USER_LOGIN, dataForm);
+//       console.log(data);
+
+//       if (status === 200) {
+//         setUser(data);
+//         localStorage.setItem("user", JSON.stringify(data));
+//         const recupUser = localStorage.getItem("user");
+//         JSON.perse(recupUser);
+//         setIsLoading(false);
+//       }
+//     } catch (error) {
+//       console.log(error);
+//       setIsLoading(false);
+//     }
+//   };
+
+//   // Déconnexion
+//   const logout = () => {
+//     console.log("Entree dans le Logout");
+//     setUser(null);
+//     localStorage.removeItem("user");
+//   };
+
+//   return (
+//     <AuthContext.Provider
+//       value={{ login, logout, user, isLoading, isAuthenticated }}
+//     >
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
 import React, { createContext, useState, useEffect } from "react";
 import { URL } from "../URL/URL";
 import axios from "axios";
@@ -5,67 +67,58 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Gestion du chargement
+  const [user, setUser] = useState(null); // Utilisateur connecté
 
-  // const connection = () => {
-  //   const activeUser = localStorage.getItem("user");
-  //   JSON.parse(activeUser);
-  // };
+  // Initialisation de l'utilisateur depuis localStorage
+  useEffect(() => {
+    const initializeUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser)); // Correction de JSON.parse
+      }
+    };
+    initializeUser();
+  }, []);
 
-  // const register = async (dataForm) => {
-  //   console.log("Entree dans la function register");
-  //   console.log(dataForm);
-
-  //   setIsLoading(true);
-
-  //   try {
-  //     console.log("Entree dans le try de la function Register");
-  //     const { data, status } = await axios.post(URL.USER_REGISTER, dataForm);
-  //     ///////////////////////////////////////
-  //     console.log("Fin du try de la function register");
-  //     console.log(data);
-  //     /////////////////////////////////////
-
-  //     if (status === 201) {
-  //       console.log("rentree dans l'if === 201");
-  //     }
-  //   } catch (error) {
-  //     console.log("Entree dans le catch de la function Register");
-  //   }
-  // };
-
+  // Connexion de l'utilisateur
   const login = async (dataForm) => {
-    console.log("Entree dans login");
-    console.log(dataForm);
+    console.log("Entree dans login", dataForm);
 
     setIsLoading(true);
     try {
-      console.log("Entrée dans le try de la fonction login");
-
       const { data, status } = await axios.post(URL.USER_LOGIN, dataForm);
-      console.log(data);
 
       if (status === 200) {
-        setUser(data);
-        localStorage.setItem("user", JSON.stringify(data));
-        const recupUser = localStorage.getItem("user");
-        JSON.perse(recupUser);
-        setIsLoading(false);
+        setUser(data); // Mise à jour de l'utilisateur connecté
+        localStorage.setItem("user", JSON.stringify(data)); // Stockage dans localStorage
       }
     } catch (error) {
-      console.log(error);
+      console.error("Erreur lors de la connexion :", error);
+    } finally {
       setIsLoading(false);
     }
   };
 
+  // Déconnexion de l'utilisateur
   const logout = () => {
     console.log("Entree dans le Logout");
-    localStorage.removeItem("user");
+    setUser(null); // Réinitialisation de l'utilisateur
+    localStorage.removeItem("user"); // Suppression du stockage local
+  };
+
+  // Vérifie si l'utilisateur est connecté
+  const isAuthenticated = !!user;
+
+  // Vérifie si l'utilisateur est un admin
+  const isAdmin = () => {
+    return user?.isAdmin === true; // Vérifie le champ `isAdmin`
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, user, isLoading }}>
+    <AuthContext.Provider
+      value={{ login, logout, user, isLoading, isAuthenticated, isAdmin }}
+    >
       {children}
     </AuthContext.Provider>
   );
