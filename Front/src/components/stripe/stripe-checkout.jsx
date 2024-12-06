@@ -4,6 +4,7 @@ import { fetchFromApi } from "../../utils/helpers/stripe";
 
 const StripeCheckout = () => {
   const [email, setEmail] = useState("");
+
   const stripe = useStripe();
   // const { panier } = useContext(PanierContext);
   const panier = [

@@ -4,6 +4,7 @@ import {
   Row,
   Col,
   Card,
+  ListGroup,
   Form,
   Button,
   Spinner,
@@ -11,10 +12,10 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { URL } from "../../URL/URL";
-import { Link, NavLink } from "react-router-dom";
+import "../../style/home.css";
 
 const Home = () => {
-  const { isAuthenticated, isAdmin } = useContext(AuthContext); // Vérifie si l'utilisateur est connecté
+  const { isAuthenticated } = useContext(AuthContext); // Vérifie si l'utilisateur est connecté
   const [posts, setPosts] = useState([]);
   const [commentContent, setCommentContent] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -85,29 +86,37 @@ const Home = () => {
           return (
             <Col key={post.id} md={6} lg={4}>
               <Card className="mb-4">
+                <Card.Img
+                  variant="top"
+                  src="https://via.placeholder.com/400x200" // Remplacez par une URL dynamique si disponible
+                  alt="Post Image"
+                />
                 <Card.Body>
                   <Card.Title>{post.title}</Card.Title>
                   <Card.Text>{post.content}</Card.Text>
                   <Card.Text className="text-muted">
                     Publié le {formattedDate} à {formattedTime}
                   </Card.Text>
+                </Card.Body>
 
-                  <hr />
-
-                  <h5>Commentaires</h5>
+                {/* Liste des commentaires */}
+                <ListGroup className="list-group-flush">
                   {post.comments && post.comments.length > 0 ? (
                     post.comments.map((comment, idx) => (
-                      <Card key={idx} className="mb-2">
-                        <Card.Body>
-                          <Card.Text>{comment.content}</Card.Text>
-                        </Card.Body>
-                      </Card>
+                      <ListGroup.Item key={idx}>
+                        <strong>Commentaire :</strong> {comment.content}
+                      </ListGroup.Item>
                     ))
                   ) : (
-                    <p className="text-muted">Pas encore de commentaires.</p>
+                    <ListGroup.Item>
+                      <em>Pas encore de commentaires.</em>
+                    </ListGroup.Item>
                   )}
+                </ListGroup>
 
-                  {isAuthenticated && (
+                {/* Formulaire pour ajouter un commentaire */}
+                {isAuthenticated && (
+                  <Card.Body>
                     <Form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -138,8 +147,8 @@ const Home = () => {
                         )}
                       </Button>
                     </Form>
-                  )}
-                </Card.Body>
+                  </Card.Body>
+                )}
               </Card>
             </Col>
           );
@@ -147,12 +156,8 @@ const Home = () => {
       </Row>
       {!isAuthenticated && (
         <p className="text-center mt-4">
-          Veuillez{" "}
-          <strong>
-            {" "}
-            <a href="/connexion">vous connecter</a>
-          </strong>{" "}
-          pour ajouter des commentaires.
+          Veuillez <strong>vous connecter</strong> pour ajouter des
+          commentaires.
         </p>
       )}
     </Container>
