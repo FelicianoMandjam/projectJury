@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "../pages/Auth/logout";
 import Blog from "../pages/blog/blog";
+import Logo from "../../public/images/logo_blog_2.png";
 
 import { AuthContext } from "../context/AuthContext";
 
