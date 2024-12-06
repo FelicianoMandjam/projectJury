@@ -41,10 +41,11 @@ const Header = () => {
                   <FontAwesomeIcon icon={faUser} />
                 </Nav.Link>
 
-                <Nav.Link href="/admin/backOffice">
-                  <FontAwesomeIcon icon={faUserTie} />
-                </Nav.Link>
-
+                {isAdmin() && (
+                  <Nav.Link href="/admin/backOffice">
+                    <FontAwesomeIcon className="text-danger" icon={faUserTie} />
+                  </Nav.Link>
+                )}
                 {isAuthenticated && (
                   <div className="d-flex">
                     <Logout />
@@ -58,5 +59,4 @@ const Header = () => {
     </>
   );
 };
-
 export default Header;
