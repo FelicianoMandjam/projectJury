@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+
 // Routes
 import userRoutes from "./Routes/user.routes.js";
 import categoryRoutes from "./Routes/category.routes.js";
@@ -39,5 +40,8 @@ app.use("/comment", commentRoutes);
 app.use("/product", productRoutes);
 app.use("/contact", contactRoutes);
 app.use("/stripe", stripeRoutes);
+
+// Multer
+app.use("/uploads", express.static("uploads"));
 
 export default app;

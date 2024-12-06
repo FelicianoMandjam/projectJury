@@ -85,10 +85,14 @@ const Home = () => {
 
           return (
             <Col key={post.id} md={6} lg={4}>
-              <Card className="mb-4">
+              <Card className="mb-3">
                 <Card.Img
                   variant="top"
-                  src="https://via.placeholder.com/400x200" // Remplacez par une URL dynamique si disponible
+                  src={
+                    post.image
+                      ? `${URL.REACT_APP_BASE_URL}${post.image}`
+                      : "https://via.placeholder.com/400x200"
+                  }
                   alt="Post Image"
                 />
                 <Card.Body>

@@ -58,7 +58,7 @@ const Ebook = () => {
               <strong>Caractéristiques :</strong>
             </p>
             <ul>
-              <h2>{book.price}</h2>
+              <h2>{book.price}€</h2>
               <li>Delais de livraison : 3 jours ouvrés</li>
               <li>
                 Livre physique , il en reste{" "}
