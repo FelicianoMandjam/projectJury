@@ -4,8 +4,11 @@ import { io } from "../Services/socket.js";
 // POST
 const add = async (req, res, next) => {
   try {
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
     const post = await Post.create({
       ...req.body,
+      image,
       include: [
         {
           model: Category,
@@ -14,8 +17,6 @@ const add = async (req, res, next) => {
         },
       ],
     });
-    console.log(post);
-
     // Emet un évenement websocvket pour le client
     io.emit("newPublication", post);
 
@@ -43,8 +44,7 @@ const getAll = async (req, res, next) => {
           as: "comments",
         },
       ],
-      order: [["createdAt", "DESC"]],
-      limit: 3,
+      order: [["createdAt", "DESC"], "id", "title", "content", "image"],
     });
     console.log(posts);
     if (!posts) res.status(404).json("No Post find!");

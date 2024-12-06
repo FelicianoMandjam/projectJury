@@ -65,16 +65,35 @@ const Blog = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setContent((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+
+    if (name === "avatar") {
+      setContent((prev) => ({ ...prev, avatar: files[0] })); // Stockez le fichier sélectionné
+    } else {
+      setContent((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData();
+    formData.append("title", content.title);
+    formData.append("content", content.content);
+    formData.append("categoryId", content.categoryId);
+    if (content.avatar) {
+      formData.append("avatar", content.avatar); // Ajout de l'image
+    }
+
+    // Log du contenu de FormData
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
     try {
-      await axios.post(URL.POST_ADD, content);
+      await axios.post(URL.POST_ADD, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log("Post ajouté avec succès");
 
       // Rafraîchit la liste des posts pour s'assurer qu'elle est à jour
@@ -96,7 +115,7 @@ const Blog = () => {
                 <Card.Title className="text-center">
                   Créer une nouvelle publication
                 </Card.Title>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} encType="multipart/form-data">
                   <Form.Group className="mb-3">
                     <Form.Label>Titre</Form.Label>
                     <Form.Control
@@ -141,8 +160,10 @@ const Blog = () => {
                       id="avatar"
                       name="avatar"
                       accept="image/png, image/jpeg"
+                      onChange={handleChange}
                     />
                   </Form.Group>
+
                   <Button type="submit" variant="primary" disabled={isLoading}>
                     {isLoading ? (
                       <Spinner animation="border" size="sm" />
@@ -185,11 +206,10 @@ const Blog = () => {
 
             return (
               <Card key={index} className="mb-3">
-                {/* Condition pour afficher l'image si elle est présente */}
                 {item.image && (
                   <Card.Img
                     variant="top"
-                    src={item.image} // URL de l'image de la publication
+                    src={`${URL.REACT_APP_BASE_URL}${item.image}`} // Utilisation de l'URL dynamique
                     alt="Image de la publication"
                     style={{ maxHeight: "200px", objectFit: "cover" }}
                   />
