@@ -29,7 +29,6 @@ const BackOffice = () => {
   const [deleteItem, setDeleteItem] = useState(null);
   const [activeSection, setActiveSection] = useState("users");
 
-  // Load Users from API
   useEffect(() => {
     const fetchUsers = async () => {
       console.log("fetch pour les Users");
@@ -44,7 +43,6 @@ const BackOffice = () => {
     fetchUsers();
   }, []);
 
-  // Load Posts from API
   useEffect(() => {
     const fetchPosts = async () => {
       console.log("fetch pour les Posts");

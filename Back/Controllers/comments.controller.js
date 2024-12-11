@@ -1,10 +1,25 @@
-import { Comment, User } from "../Models/index.js";
+import { Comment, User, Post } from "../Models/index.js";
+import { io } from "../Services/socket.js";
 
 const add = async (req, res, next) => {
   try {
     const { postId, content, userId } = req.body;
     const comment = await Comment.create({ postId, content, userId });
-    res.status(201).json("A New comment has been created !");
+
+    const updatedPost = await Post.findByPk(postId, {
+      include: [{ model: Comment, as: "comments" }],
+    });
+    // / Émet l'événement `newComment` via Socket.io
+    // req.io.emit("newComment", { postId, comment: comment });
+    // req.io.emit("newComment", { postId, comment });
+    if (req.io) {
+      req.io.emit("newComment", { postId, comment });
+      console.log("Événement newComment émis :", { postId, comment });
+    } else {
+      console.log("Socket.io non attaché à req.");
+    }
+
+    res.status(201).json("A New comment has been created !", updatedPost);
     if (!comment) res.status(404).json("No comment added ! ");
   } catch (error) {
     console.log(error);
