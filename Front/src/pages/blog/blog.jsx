@@ -208,7 +208,7 @@ const Blog = () => {
                 {item.image && (
                   <Card.Img
                     variant="top"
-                    src={`${URL.REACT_APP_BASE_URL}${item.image}`} // Utilisation de l'URL dynamique
+                    src={`${URL.REACT_APP_BASE_URL}${item.image}`}
                     alt="Image de la publication"
                     style={{ maxHeight: "200px", objectFit: "cover" }}
                   />
