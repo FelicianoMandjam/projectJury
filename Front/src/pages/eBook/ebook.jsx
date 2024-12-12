@@ -1,20 +1,3 @@
-// import React from "react";
-// import StripeCheckout from "../../components/stripe/stripe-checkout";
-
-// const Ebook = () => {
-//   // Récuperer le produit AXIOS
-//   // OnRécupere le composants stripe-checkout.jsx
-
-//   return (
-//     <div>
-//       <h1>Page produit</h1>
-//       <StripeCheckout />
-//     </div>
-//   );
-// };
-
-// export default Ebook;
-
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
 import StripeCheckout from "../../components/stripe/stripe-checkout";
@@ -45,10 +28,7 @@ const Ebook = () => {
         <Row className="align-items-center">
           <Col md={6}>
             <Card style={{ width: "20rem" }}>
-              <Card.Img
-                src={Bookcover} // Remplacez par l'URL réelle de votre image de produit
-                alt="Livre physique"
-              />
+              <Card.Img src={Bookcover} alt="Livre physique" />
             </Card>
           </Col>
           <Col md={6}>
