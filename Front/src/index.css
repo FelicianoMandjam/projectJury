@@ -1,9 +1,15 @@
 .footer {
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
   background-color: #f8f9fa;
   text-align: center;
   padding: 10px 0;
   border-top: 1px solid #dee2e6;
+}
+
+.container-main {
+  min-height: calc(100vh - 150px);
+  padding: 20px;
+  background-color: #f8f9fa;
 }

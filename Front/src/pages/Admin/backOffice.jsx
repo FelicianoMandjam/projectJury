@@ -266,7 +266,6 @@ const BackOffice = () => {
               </Table>
             </div>
           )}
-
           {activeSection === "posts" && (
             <div>
               <h2>Gestion des Publications</h2>
@@ -274,6 +273,7 @@ const BackOffice = () => {
                 <Table striped bordered hover>
                   <thead>
                     <tr>
+                      <th>Id</th>
                       <th>Titre</th>
                       <th>Contenu</th>
                       <th>Actions</th>
@@ -282,6 +282,7 @@ const BackOffice = () => {
                   <tbody>
                     {posts.map((post) => (
                       <tr key={post.id}>
+                        <td>{post.id}</td>
                         <td>{post.title}</td>
                         <td>{post.content}</td>
                         <td>
@@ -305,7 +306,6 @@ const BackOffice = () => {
               </div>
             </div>
           )}
-
           {activeSection === "categories" && (
             <div>
               <h2>Gestion des Catégories</h2>
@@ -359,7 +359,6 @@ const BackOffice = () => {
               </Form>
             </div>
           )}
-
           {activeSection === "products" && (
             <div>
               <h2>Gestion des Produits</h2>
@@ -452,7 +451,7 @@ const BackOffice = () => {
               </Form>
             </div>
           )}
-
+          {/* / /CRUD */}
           <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton>
               <Modal.Title>Modifier l'Élément</Modal.Title>
@@ -618,8 +617,6 @@ const BackOffice = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-
-          {/* Modal for Confirming Deletion */}
           <Modal
             show={showDeleteModal}
             onHide={() => setShowDeleteModal(false)}
