@@ -15,6 +15,7 @@ import { URL } from "../../URL/URL";
 import "../../style/home.css";
 import { io } from "socket.io-client";
 import PostCarousel from "../../components/PostCarousel";
+import Bookcover from "../../../public/images/Bookcover.png";
 
 // Initialise le socket
 const socket = io(URL.REACT_APP_BASE_URL);
@@ -25,9 +26,8 @@ const Home = () => {
   const [commentContent, setCommentContent] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const DESCRIPTION_LIMIT = 100; // Limite pour la description
+  const limit_content = 100;
 
-  // Récupération initiale des 3 derniers posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -65,7 +65,7 @@ const Home = () => {
     };
   }, []);
 
-  // Gestion des changements dans les champs de commentaire
+  // Gestion des channgements dans les champs de commentaire
   const handleCommentChange = (postId, value) => {
     setCommentContent((prev) => ({ ...prev, [postId]: value }));
   };
@@ -92,9 +92,32 @@ const Home = () => {
   return (
     <Container className="mt-5">
       <h1 className="text-center mb-4">Bienvenue sur la page d'accueil</h1>
+
       <PostCarousel />
+
+      <hr />
+      <Row className="align-items-center mb-5">
+        <Col md={6}>
+          <h2>Découvrez notre E-Book exclusif</h2>
+          <p>
+            Plongez dans une ressource complète qui vous aidera à atteindre vos
+            objectifs. Cliquez ci-dessous pour en savoir plus et accéder à notre
+            E-book.
+          </p>
+          <Button href="/ebook" variant="success">
+            Explorer l'E-book
+          </Button>
+        </Col>
+        <Col md={6}>
+          <img src={Bookcover} alt="E-book" className="img-fluid rounded" />
+        </Col>
+      </Row>
       <hr className="text-danger" />
+
       <Row>
+        <div>
+          <h1 className="text-center">Derniers articles</h1>
+        </div>
         {posts.map((post) => {
           const createdAt = new Date(post.createdAt);
           const formattedDate = createdAt.toLocaleDateString("fr-FR", {
@@ -108,8 +131,8 @@ const Home = () => {
           });
 
           const truncatedContent =
-            post.content.length > DESCRIPTION_LIMIT
-              ? `${post.content.substring(0, DESCRIPTION_LIMIT)}...`
+            post.content.length > limit_content
+              ? `${post.content.substring(0, limit_content)}...`
               : post.content;
 
           return (
@@ -158,7 +181,6 @@ const Home = () => {
                   )}
                 </ListGroup>
 
-                {/* Formulaire pour ajouter un commentaire */}
                 {isAuthenticated && (
                   <Card.Body>
                     <Form

@@ -7,7 +7,16 @@ const Layout = ({ children }) => {
   return (
     <>
       <Header />
-      {children}
+      <div
+        className="container-main"
+        style={{
+          minHeight: "calc(100vh - 150px)",
+          padding: "20px",
+          backgroundColor: "#f8f9fa",
+        }}
+      >
+        {children}
+      </div>
       <Footer />
     </>
   );
