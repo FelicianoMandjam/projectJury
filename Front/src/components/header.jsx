@@ -4,7 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "../pages/Auth/logout";
 import Blog from "../pages/blog/blog";
-import Logo from "../../public/images/logo_blog_2.png";
+// import Logo from "../../public/images/logo_blog_2.png";
 
 import { AuthContext } from "../context/AuthContext";
 
@@ -20,7 +20,7 @@ const Header = () => {
   return (
     <>
       <div className="header">
-        <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar expand="lg" fixed="top" className="bg-body-tertiary">
           <Container>
             <Navbar.Brand href="/">Logo</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -31,9 +31,6 @@ const Header = () => {
                 </Nav.Link>
                 <Nav.Link href="/ebook">E-BOOK</Nav.Link>
                 <Nav.Link href="/blog">BLOG</Nav.Link>
-                <Nav.Link href="/panier">
-                  <FontAwesomeIcon icon={faBasketShopping} />
-                </Nav.Link>
                 <Nav.Link href="/contact">
                   <FontAwesomeIcon icon={faEnvelope} />
                 </Nav.Link>
