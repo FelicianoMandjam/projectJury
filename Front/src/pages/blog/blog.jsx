@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+// URL
+import { URL } from "../../URL/URL";
 import {
   Container,
   Row,
@@ -12,13 +14,10 @@ import {
 
 import { AuthContext } from "../../context/AuthContext";
 
-// URL
-import { URL } from "../../URL/URL";
-
 // Socket
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+const socket = io(URL.REACT_APP_BASE_URL);
 
 const Blog = () => {
   const { isAdmin } = useContext(AuthContext);
@@ -209,7 +208,7 @@ const Blog = () => {
                 {item.image && (
                   <Card.Img
                     variant="top"
-                    src={`${URL.REACT_APP_BASE_URL}${item.image}`} // Utilisation de l'URL dynamique
+                    src={`${URL.REACT_APP_BASE_URL}${item.image}`}
                     alt="Image de la publication"
                     style={{ maxHeight: "200px", objectFit: "cover" }}
                   />

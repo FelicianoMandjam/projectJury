@@ -29,7 +29,6 @@ const BackOffice = () => {
   const [deleteItem, setDeleteItem] = useState(null);
   const [activeSection, setActiveSection] = useState("users");
 
-  // Load Users from API
   useEffect(() => {
     const fetchUsers = async () => {
       console.log("fetch pour les Users");
@@ -44,7 +43,6 @@ const BackOffice = () => {
     fetchUsers();
   }, []);
 
-  // Load Posts from API
   useEffect(() => {
     const fetchPosts = async () => {
       console.log("fetch pour les Posts");
@@ -461,18 +459,36 @@ const BackOffice = () => {
             </Modal.Header>
             <Modal.Body>
               <Form>
-                <Form.Group controlId="formEditItemName">
-                  <Form.Label>Nom</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={selectedItem?.name || ""}
-                    onChange={(e) =>
-                      setSelectedItem({ ...selectedItem, name: e.target.value })
-                    }
-                  />
-                </Form.Group>
+                {activeSection !== "users" && (
+                  <Form.Group controlId="formEditItemName">
+                    <Form.Label>Nom</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={selectedItem?.name || "Username*"}
+                      onChange={(e) =>
+                        setSelectedItem({
+                          ...selectedItem,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                )}
                 {activeSection === "users" && (
                   <>
+                    <Form.Group controlId="formEditUserFirstName">
+                      <Form.Label>Nom d'utilisateur</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={selectedItem?.username || ""}
+                        onChange={(e) =>
+                          setSelectedItem({
+                            ...selectedItem,
+                            username: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
                     <Form.Group controlId="formEditUserFirstName">
                       <Form.Label>Prénom</Form.Label>
                       <Form.Control

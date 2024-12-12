@@ -2,7 +2,6 @@ export default (connection, DataTypes) => {
   connection.define(
     "Post",
     {
-      // Model attributes are defined here
       title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -17,7 +16,7 @@ export default (connection, DataTypes) => {
       },
       categoryId: {
         type: DataTypes.INTEGER,
-        allowNull: false, // Assurez-vous que cette clé étrangère est obligatoire
+        allowNull: false,
       },
     },
     {

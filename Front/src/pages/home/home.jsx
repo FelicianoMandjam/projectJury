@@ -13,14 +13,21 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { URL } from "../../URL/URL";
 import "../../style/home.css";
+import { io } from "socket.io-client";
+import PostCarousel from "../../components/PostCarousel";
+
+// Initialise le socket
+const socket = io(URL.REACT_APP_BASE_URL);
 
 const Home = () => {
-  const { isAuthenticated } = useContext(AuthContext); // Vérifie si l'utilisateur est connecté
+  const { isAuthenticated } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [commentContent, setCommentContent] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Récupère les 3 derniers posts au chargement
+  const DESCRIPTION_LIMIT = 100; // Limite pour la description
+
+  // Récupération initiale des 3 derniers posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -32,9 +39,33 @@ const Home = () => {
     };
 
     fetchPosts();
+
+    // Écoute des nouvelles publications
+    socket.on("newPublication", (newPublication) => {
+      setPosts((prevPost) => [newPublication, ...prevPost.slice(0, 2)]);
+    });
+
+    // Écoute des nouveaux commentaires
+    socket.on("newComment", ({ postId, comment }) => {
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId
+            ? {
+                ...post,
+                comments: [...(post.comments || []), comment],
+              }
+            : post
+        )
+      );
+    });
+
+    return () => {
+      socket.off("newPublication");
+      socket.off("newComment");
+    };
   }, []);
 
-  // Gestion des changements de contenu des commentaires
+  // Gestion des changements dans les champs de commentaire
   const handleCommentChange = (postId, value) => {
     setCommentContent((prev) => ({ ...prev, [postId]: value }));
   };
@@ -46,19 +77,10 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      // Ajoute un commentaire
       await axios.post(URL.COMMENT_ADD, {
         postId,
         content: commentContent[postId],
       });
-
-      // Rafraîchit les commentaires du post après ajout
-      const { data } = await axios.get(`${URL.POST_GET_ONE}/${postId}`);
-      setPosts((prevPosts) =>
-        prevPosts.map((post) => (post.id === postId ? data : post))
-      );
-
-      // Réinitialise le champ commentaire
       setCommentContent((prev) => ({ ...prev, [postId]: "" }));
     } catch (error) {
       console.error("Erreur lors de l'ajout du commentaire :", error);
@@ -70,6 +92,8 @@ const Home = () => {
   return (
     <Container className="mt-5">
       <h1 className="text-center mb-4">Bienvenue sur la page d'accueil</h1>
+      <PostCarousel />
+      <hr className="text-danger" />
       <Row>
         {posts.map((post) => {
           const createdAt = new Date(post.createdAt);
@@ -83,6 +107,11 @@ const Home = () => {
             minute: "2-digit",
           });
 
+          const truncatedContent =
+            post.content.length > DESCRIPTION_LIMIT
+              ? `${post.content.substring(0, DESCRIPTION_LIMIT)}...`
+              : post.content;
+
           return (
             <Col key={post.id} md={6} lg={4}>
               <Card className="mb-3">
@@ -91,29 +120,40 @@ const Home = () => {
                   src={
                     post.image
                       ? `${URL.REACT_APP_BASE_URL}${post.image}`
-                      : "https://via.placeholder.com/400x200"
+                      : "https://cdn.pixabay.com/photo/2021/11/10/06/23/workout-6783020_1280.jpg"
                   }
                   alt="Post Image"
                 />
                 <Card.Body>
                   <Card.Title>{post.title}</Card.Title>
-                  <Card.Text>{post.content}</Card.Text>
+                  <Card.Text>{truncatedContent}</Card.Text>
                   <Card.Text className="text-muted">
                     Publié le {formattedDate} à {formattedTime}
                   </Card.Text>
                 </Card.Body>
 
-                {/* Liste des commentaires */}
+                {/* Liste des commentaires (tous présents, mais 3 visibles en défilement) */}
                 <ListGroup className="list-group-flush">
                   {post.comments && post.comments.length > 0 ? (
-                    post.comments.map((comment, idx) => (
-                      <ListGroup.Item key={idx}>
-                        <strong>Commentaire :</strong> {comment.content}
-                      </ListGroup.Item>
-                    ))
+                    <div style={{ maxHeight: "150px", overflowY: "scroll" }}>
+                      {post.comments.map((comment, idx) => (
+                        <ListGroup.Item key={idx}>
+                          <strong>Commentaire :</strong> {comment.content}
+                        </ListGroup.Item>
+                      ))}
+                    </div>
                   ) : (
                     <ListGroup.Item>
                       <em>Pas encore de commentaires.</em>
+                      {!isAuthenticated && (
+                        <p className="text-center mt-4">
+                          Veuillez{" "}
+                          <strong>
+                            <a href="/register">vous connecter</a>
+                          </strong>{" "}
+                          pour ajouter des commentaires.
+                        </p>
+                      )}
                     </ListGroup.Item>
                   )}
                 </ListGroup>
@@ -158,12 +198,6 @@ const Home = () => {
           );
         })}
       </Row>
-      {!isAuthenticated && (
-        <p className="text-center mt-4">
-          Veuillez <strong>vous connecter</strong> pour ajouter des
-          commentaires.
-        </p>
-      )}
     </Container>
   );
 };

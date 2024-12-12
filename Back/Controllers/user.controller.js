@@ -53,13 +53,8 @@ const register = async (req, res, next) => {
   try {
     //  Je crypte (haché) le mdp avec bcrypt, 10 est est le nombre de tours de salage
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
     // Création d'un nouveau user dans la bdd , avec les info réçues et le mdp haché
-    await User.create({
-      ...req.body,
-      password: hashedPassword,
-    });
-
+    await User.create({ ...req.body, password: hashedPassword });
     // Envoi d'une réponse avec le status 201 (crée) et un message de confirmation
     res.status(201).json("User has been created!");
   } catch (error) {
