@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useStripe } from "@stripe/react-stripe-js";
 import { fetchFromApi } from "../../utils/helpers/stripe";
+import { Button } from "react-bootstrap";
 
 const StripeCheckout = () => {
   const [email, setEmail] = useState("");
@@ -52,7 +53,7 @@ const StripeCheckout = () => {
           placeholder="email"
           value={email}
         />
-        <button type="submit">Acheter</button>
+        <Button type="submit">Acheter</Button>
       </form>
     </>
   );

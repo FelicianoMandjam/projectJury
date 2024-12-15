@@ -31,11 +31,11 @@ const Header = () => {
             src={LogoPage}
             alt="Logo"
             style={{
-              width: "50px", // Ajustez la largeur
-              height: "50px", // Ajustez la hauteur
-              borderRadius: "50%", // Rend l'image ronde
-              border: "2px solid #ccc", // Bordure grise, ajustez selon vos besoins
-              objectFit: "cover", // Maintient le contenu bien ajusté
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              border: "2px solid #ccc",
+              objectFit: "cover",
             }}
           />
         </Navbar.Brand>
@@ -44,13 +44,13 @@ const Header = () => {
           <Nav className="mx-auto">
             <Nav.Link href="/" className="d-flex align-items-center">
               <FontAwesomeIcon icon={faHouse} />{" "}
-              <span className="ms-2">Accueil</span>
+              <span className="ms-2">ACCEUIL</span>
             </Nav.Link>
             <Nav.Link href="/ebook">E-BOOK</Nav.Link>
             <Nav.Link href="/blog">BLOG</Nav.Link>
             <Nav.Link href="/contact" className="d-flex align-items-center">
               <FontAwesomeIcon icon={faEnvelope} />{" "}
-              <span className="ms-2">Contact</span>
+              {/* <span className="ms-2">CONTACT</span> */}
             </Nav.Link>
           </Nav>
           <Nav className="ms-auto">
