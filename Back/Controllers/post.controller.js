@@ -12,8 +12,8 @@ const add = async (req, res, next) => {
       include: [
         {
           model: Category,
-          as: "category", // Alias correspondant à la relation
-          attributes: ["id", "name"], // Champs spécifiques de la catégorie
+          as: "category",
+          attributes: ["id", "name"],
         },
       ],
     });
@@ -36,8 +36,8 @@ const getAll = async (req, res, next) => {
       include: [
         {
           model: Category,
-          as: "category", // Model/index.js ce que je declare dans les relations
-          attributes: ["id", "name"], //champs nécessaires
+          as: "category",
+          attributes: ["id", "name"],
         },
         {
           model: Comment,

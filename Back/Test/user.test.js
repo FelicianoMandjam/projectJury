@@ -24,20 +24,25 @@ describe('Should test all request from API /user"', () => {
     expect(statusCode).toBe(200);
   });
 
-  //   GET Case ERROR SERVER: user/showAll
-  //   it('Should return a statusCode(500) and a message "user not found" from the route /user/getAll', async () => {
-  //     const { body, statusCode } = await request(app).get("user/getAll");
-  //     expect(body).toEqual(
-  //       expect.arrayContaining([
-  //         expect.objectContaining({
-  //           id: expect.any(Number),
-  //           firstName: expect.any(String),
-  //           lastName: expect.any(String),
-  //           email: expect.any(String),
-  //           password: expect.any(String),
-  //         }),
-  //       ])
-  //     );
-  //     expect(statusCode).toBe(500);
-  //   });
+  // it("Should return an object with status(201) from the route /product/add", async () => {
+  //   const { body, statusCode } = await request(app)
+  //     .post("/product/add")
+  //     .send({
+  //       name: "Test Product",
+  //       price: "100",
+  //       description: "Sample product",
+  //       stock: expect.any(Number),
+  //     });
+
+  //   expect(body).toEqual(
+  //     expect.objectContaining({
+  //       id: expect.any(Number),
+  //       name: "Test Product",
+  //       price: "100",
+  //       description: "Sample product",
+  //       stock: expect.any(Number),
+  //     })
+  //   );
+  //   expect(statusCode).toBe(201);
+  // });
 });
