@@ -18,10 +18,10 @@ export const sendMail = async (req, res, next) => {
     const contact = await Contact.create(req.body);
 
     await transport.sendMail({
-      from: env.MAIL_FROM, // sender address
-      to: "ProjetBlog@mail.com", // list of receivers
-      subject: "Nouvelle prise de contact.", // Subject line
-      text: "Hello world?", // plain text body
+      from: env.MAIL_FROM,
+      to: "ProjetBlog@mail.com",
+      subject: "Nouvelle prise de contact.",
+      text: "Hello world?",
       html: `<h1>Contact ProjetBlog</h1>
        <ul
       <li>Prénom : ${contact.firstname}</li>

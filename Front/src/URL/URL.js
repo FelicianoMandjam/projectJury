@@ -1,4 +1,5 @@
 export const URL = {
+  // DEV_________________
   // Users
   USER_LOGIN: "http://localhost:3001/user/login",
   USER_GET_BYID: "http://localhost:3001/user",
@@ -45,3 +46,53 @@ export const URL = {
   REACT_APP_BASE_URL: "http://localhost:3001",
 };
 // Faire attention quand utiliser Docker , rélizer .env a la racine du front et remplacer le localhost par le nom du service
+
+// ___________________________________
+// Built : Prod AWS _______________________________________
+// export const URL = {
+//   // Users
+//   USER_LOGIN: "http://13.60.98.197:3001/user/login",
+//   USER_GET_BYID: "http://13.60.98.197:3001/user",
+//   USER_GET_ONE: "http://13.60.98.197:3001/user/getByUsername",
+//   USER_GET_ALL: "http://13.60.98.197:3001/user/getAll",
+//   USER_REGISTER: "http://13.60.98.197:3001/user/register",
+//   USER_DELETE: "http://13.60.98.197:3001/user",
+//   USER_UPDATE: "http://13.60.98.197:3001/user",
+
+//   //   Post
+//   POST_ADD: "http://13.60.98.197:3001/post/add",
+//   POST_GET_ALL: "http://13.60.98.197:3001/post/getAll",
+//   POST_GET_ONE: "http://13.60.98.197:3001/post/getOne",
+//   POST_GET_ONE_BYID: "http://13.60.98.197:3001/post",
+//   POST_DELETE: "http://13.60.98.197:3001/post",
+//   POST_UPDATE: "http://13.60.98.197:3001/post",
+
+//   //  Category
+//   CATEGORY_ADD: "http://13.60.98.197:3001/category/add",
+//   CATEGORY_GET_ALL: "http://13.60.98.197:3001/category/getAll",
+//   CATEGORY_GET_ONE: "http://13.60.98.197:3001/category/getOne",
+//   CATEGORY_GET_ONE_BYID: "http://13.60.98.197:3001/category",
+//   CATEGORY_DELETE: "http://13.60.98.197:3001/category",
+//   CATEGORY_UPDATE: "http://13.60.98.197:3001/category",
+
+//   //   Product
+//   PRODUCT_ADD: "http://13.60.98.197:3001/product/add",
+//   PRODUCT_GET_ALL: "http://13.60.98.197:3001/product/getAll",
+//   PRODUCT_GET_ONE: "http://13.60.98.197:3001/product/getOne",
+//   PRODUCT_GET_ONE_BYID: "http://13.60.98.197:3001/product",
+//   PRODUCT_DELETE: "http://13.60.98.197:3001/product",
+//   PRODUCT_UPDATE: "http://13.60.98.197:3001/product",
+
+//   //   Comments
+//   COMMENT_ADD: "http://13.60.98.197:3001/comment/add",
+//   COMMENT_GET_ALL: "http://13.60.98.197:3001/comment/getAll",
+//   COMMENT_GET_ONE_BYID: "http://13.60.98.197:3001/comment",
+//   COMMENT_DELETE: "http://13.60.98.197:3001/comment",
+
+//   // Contact
+//   CONTACT_POST: "http://13.60.98.197:3001/contact/post",
+
+//   // REACT
+//   REACT_APP_BASE_URL: "http://13.60.98.197:3001",
+// };
+// // Faire attention quand utiliser Docker , rélizer .env a la racine du front et remplacer le localhost par le nom du service

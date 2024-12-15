@@ -155,7 +155,6 @@ const Home = () => {
                   </Card.Text>
                 </Card.Body>
 
-                {/* Liste des commentaires (tous présents, mais 3 visibles en défilement) */}
                 <ListGroup className="list-group-flush">
                   {post.comments && post.comments.length > 0 ? (
                     <div style={{ maxHeight: "150px", overflowY: "scroll" }}>
